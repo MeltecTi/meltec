@@ -1,0 +1,30 @@
+.cardImage {
+    width: 10rem;
+    height: 100%;
+    background-image: linear-gradient(163deg, #292f74 0%, #00afef 100%);
+    border-radius: .5rem;
+    transition: all .3s;
+    
+   }
+   
+   .card2Image {
+    width: 10rem;
+    height: 100%;
+    background-color: #f4f5f7;
+    border-radius: .5rem;
+    transition: all .2s;
+   }
+
+   .card2Image img {
+    border-radius: .5rem;
+    height: 100%;
+   }
+   
+   .card2Image:hover {
+    transform: scale(0.98);
+    border-radius: 20px;
+   }
+   
+   .cardImage:hover {
+    box-shadow: 0px 0px 30px 1px rgba(41, 47, 116, 1);
+   }
