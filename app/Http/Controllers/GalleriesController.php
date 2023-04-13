@@ -40,7 +40,7 @@ class GalleriesController extends Controller
      */
     public function store(Request $request)
     {
-
+    
         $file = $request->file('file');
         $fileName = uniqid(). $file->getClientOriginalName();
         $file->move(storage_path('app/public/img/gallery/'), $fileName);

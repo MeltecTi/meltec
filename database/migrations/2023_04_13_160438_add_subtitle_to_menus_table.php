@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('login_logs', function (Blueprint $table) {
-            $table->string('type_login')->after('user_id');
+        Schema::table('menus', function (Blueprint $table) {
+            $table->string('subtitle')->after('slug');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('login_logs', function (Blueprint $table) {
-            
+        Schema::table('menus', function (Blueprint $table) {
+            //
         });
     }
 };

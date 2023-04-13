@@ -11,8 +11,9 @@ use OwenIt\Auditing\Contracts\Auditable;
 class Blog extends Model implements Auditable
 {
     use HasFactory;
-
     use  \OwenIt\Auditing\Auditable;
+
+    protected $table = 'blogs';
     
     protected $fillable = ['title', 'content', 'user_id', 'category_id', 'image'];
 

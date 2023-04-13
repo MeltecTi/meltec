@@ -12,8 +12,8 @@
         <div class="container">
             <div class="container py-5">
                 <div class="section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px;">
-                    <h5 class="fw-bold text-primary text-uppercase">{{ $page->content }}</h5>
-                    <h1 class="mb-0">{{ $page->subtitle }}</h1>
+                    <h5 class="fw-bold text-primary text-uppercase">{{ $page->subtitle }}</h5>
+                    <h1 class="mb-0">{!! $page->content !!}</h1>
                 </div>
 
                 {{-- Carta de las marcas --}}

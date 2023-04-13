@@ -43,7 +43,7 @@
                                         <small><i class="far fa-calendar-alt text-primary me-2"></i>{{ \Carbon\Carbon::parse($blog->created_at)->toFormattedDateString() }}</small>
                                     </div>
                                     <h4 class="mb-3">{{ $blog->title }}</h4>
-                                    <p>{!! Str::limit($blog->content, 20) !!}</p>
+                                    {{-- <p>{!! Str::limit($blog->content, 20) !!}</p> --}}
                                     <a class="text-uppercase" href=" {{ url('blogs', $blog->id) }} ">{{  _('Ver Entrada ') }}<i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>

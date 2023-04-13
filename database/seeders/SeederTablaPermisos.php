@@ -17,32 +17,32 @@ class SeederTablaPermisos extends Seeder
     {
         $permisos = [
             // // Tabla Roles
-            // 'ver-rol',
-            // 'crear-rol',
-            // 'editar-rol',
-            // 'borrar-rol',
+            'ver-rol',
+            'crear-rol',
+            'editar-rol',
+            'borrar-rol',
 
             // //Tabla Blogs
-            // 'ver-blog',
-            // 'crear-blog',
-            // 'editar-blog',
-            // 'borrar-blog',
+            'ver-blog',
+            'crear-blog',
+            'editar-blog',
+            'borrar-blog',
 
             //Tabla Categorias
-            // 'ver-categoria',
-            // 'crear-categoria',
-            // 'editar-categoria',
-            // 'borrar-categoria',
+            'ver-categoria',
+            'crear-categoria',
+            'editar-categoria',
+            'borrar-categoria',
 
             //Tabla Usuarios
-            // 'crear-usuarios',
-            // 'editar-usuarios',
-            // 'borrar-usuarios',
+            'crear-usuarios',
+            'editar-usuarios',
+            'borrar-usuarios',
             'ver-todos-los-usuarios'
         ];
 
         foreach($permisos as $permiso) {
-            Permission::create(['name' =>$permiso]);
+            Permission::create(['name' =>$permiso, 'guard_name' => 'api']);
         }
     }
 }
