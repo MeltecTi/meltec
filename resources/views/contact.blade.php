@@ -19,15 +19,18 @@
         </div>
         <div class="row g-5 mt-5">
             <div class="col-lg-6 wow slideInUp" data-wow-delay="0.3s">
-                @include('includes.contactform')
+
+                <iframe width="100%" height="450" src="https://app.flokzu.com/public/039e4LGESR?embedded=true"
+                    frameborder="0"></iframe>
+                {{-- @include('includes.contactform')
                 <div class="loader" id="loader">
                     @include('includes.dashboard.loader')
-                </div>
+                </div> --}}
             </div>
             <div class="col-lg-6 wow slideInUp" data-wow-delay="0.6s">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.2845683867495!2d-74.0687423!3d4.7205544999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f852459bad601%3A0x799ac647e2c83082!2sMeltec%20Comunicaciones%20S.A.!5e0!3m2!1ses!2sco!4v1681247823174!5m2!1ses!2sco"
-                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade" style=""></iframe>
             </div>
         </div>
@@ -52,5 +55,8 @@
             @endforeach
         </div>
     </div>
-    @vite(['resources/js/custom/contact/form.js'])
+
+
+
+    {{-- @vite(['resources/js/custom/contact/form.js']) --}}
 @endsection

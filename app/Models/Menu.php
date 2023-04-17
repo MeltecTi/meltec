@@ -32,9 +32,9 @@ class Menu extends Model implements Auditable
         return $this->query()->get()->where('parent', $parent);
     }
 
-    public function getIdByNamePage(string $name)
+    public function getIdByNamePage(string $slug)
     {
-        return $this->query()->get()->where('name', $name)->first();
+        return $this->query()->get()->where('slug', $slug)->first();
     }
 
     public function galleries(): BelongsToMany

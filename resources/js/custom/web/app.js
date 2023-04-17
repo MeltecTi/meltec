@@ -50,6 +50,135 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    async function sendInputUpdate(value, id) {
+        const data = {
+            component: value,
+        };
+
+        const url = `/api/recursos/${id}`;
+
+        try {
+            const request = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    Authorization: `Bearer ${apiToken}`,
+                    "X-CSRF-TOKEN": _token,
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await request.json();
+
+            if (!request.ok) {
+                throw new Error(result.message);
+            }
+
+            if (result.success) {
+                Toastify({
+                    text: result.message,
+                    style: {
+                        background: "#198754",
+                    },
+                    duration: 3000,
+                }).showToast();
+            }
+        } catch (error) {
+            Toastify({
+                text: error.message,
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
+    }
+
+    async function sendContentUpdate(value, id) {
+        const url = `/api/recursos/${id}`;
+
+        const data = {
+            content: value,
+        };
+
+        try {
+            const request = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${apiToken}`,
+                    "X-CSRF-TOKEN": _token,
+                },
+                method: "PATCH",
+                body: JSON.stringify(data),
+                mode: "cors",
+            });
+            const result = await request.json();
+            if (!request.ok) {
+                throw new Error(result.message);
+            }
+
+            if (result.success) {
+                Toastify({
+                    text: result.message,
+                    style: {
+                        background: "#198754",
+                    },
+                    duration: 3000,
+                }).showToast();
+            }
+        } catch (error) {
+            Toastify({
+                text: error.message,
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
+    }
+
+    async function sendSelectUpdate(value, id) {
+        const url = `/api/recursos/${id}`;
+
+        const data = {
+            'type': value,
+        };
+
+        console.log(data);
+
+        try {
+            const request = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${apiToken}`,
+                    "X-CSRF-TOKEN": _token,
+                },
+                method: "PATCH",
+                body: JSON.stringify(data),
+                mode: "cors",
+            });
+            const result = await request.json();
+            if (!request.ok) {
+                throw new Error(result.message);
+            }
+
+            if (result.success) {
+                Toastify({
+                    text: result.message,
+                    style: {
+                        background: "#198754",
+                    },
+                    duration: 3000,
+                }).showToast();
+            }
+        } catch (error) {
+            Toastify({
+                text: error.message,
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
+    }
+
     function mostrarDatos() {
         limpiarModal();
 
@@ -88,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const tbody = document.createElement("TBODY");
             resouces.forEach((resource) => {
-                const { id, component, content } = resource;
+                const { id, component, content, type_component } = resource;
 
                 const tr = document.createElement("TR");
                 const tdInputComponent = document.createElement("TD");
@@ -122,45 +251,86 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const tdInputContent = document.createElement("TD");
 
+                const divComponentTextArea = document.createElement("DIV");
+                divComponentTextArea.classList.add(
+                    "form-floating",
+                    "mb-3",
+                    "col-10"
+                );
+
                 const inputContent = document.createElement("TEXTAREA");
                 inputContent.classList.add("form-control");
-                inputContent.setAttribute("style", "height: 10rem;");
                 inputContent.textContent = content;
 
-                tdInputContent.appendChild(inputContent);
+                ClassicEditor.create(inputContent)
+                    .then((editor) => {
+                        editor.model.document.on("change:data", () => {
+                            const contenidos = inputContent;
+                            contenidos.value = editor.getData();
+                        });
+                        editor.editing.view.document.on("blur", (e, data) => {
+                            sendContentUpdate(editor.getData(), id);
+                        });
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
+                divComponentTextArea.appendChild(inputContent);
+                tdInputContent.appendChild(divComponentTextArea);
+
+                // Evento blur cuando cambia el textarea
+
+                inputContent.addEventListener("input", (e) => {
+                    console.log(e);
+                });
+
+                const tdSelect = document.createElement("TD");
+                const divSelect = document.createElement("DIV");
+
+                // Crear el elemento select
+                let select = document.createElement("select");
+                select.classList.add("form-select", "col-3");
+                select.setAttribute('value', type_component);
+                
+
+                // Crear las opciones
+                let option1 = document.createElement("option");
+                option1.value = '';
+                option1.text = "Tipo de Dato";
+
+                let option2 = document.createElement("option");
+                option2.value = "url";
+                option2.text = "Url o Red Social";
+
+                let option3 = document.createElement("option");
+                option3.value = "text";
+                option3.text = "Texto con icono";
+
+                // Agregar las opciones al select
+                select.appendChild(option1);
+                select.appendChild(option2);
+                select.appendChild(option3);
+
+                divSelect.appendChild(select);
+
+                tdSelect.appendChild(divSelect);
+
+                // Evento change en el Select
+                select.addEventListener("change", (e) => {
+                    const data = e.target.value;
+                    const sanit = encodeURIComponent(data).toLowerCase();
+                    sendSelectUpdate(sanit, id);
+                });
 
                 tr.appendChild(tdInputComponent);
                 tr.appendChild(tdInputContent);
+                tr.appendChild(tdSelect);
                 tbody.appendChild(tr);
             });
 
             table.appendChild(tbody);
             modalBody.appendChild(table);
-        }
-    }
-
-    async function sendInputUpdate(value, id) {
-
-        const data = {
-            'component' : value
-        }
-
-        const url = `/api/recursos/${id}`;
-
-        try {
-            const request = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${apiToken}`,
-                    "X-CSRF-TOKEN": _token,
-                },
-                body: JSON.stringify(data),
-            });
-
-            const result = await request.json();
-            console.log(result);
-        } catch (error) {
-            console.log(error);
         }
     }
 

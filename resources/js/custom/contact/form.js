@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
         phone: "",
         email: "",
         city: "",
-        mark: "",
-        industry: "",
+        // mark: "",
+        // industry: "",
         message: "",
     };
 
@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
     phone.addEventListener("blur", validar);
     email.addEventListener("blur", validar);
     city.addEventListener("change", validarSelect);
-    mark.addEventListener("change", validarSelect);
-    industry.addEventListener("change", validarSelect);
+    // mark.addEventListener("change", validarSelect);
+    // industry.addEventListener("change", validarSelect);
     message.addEventListener("blur", validar);
 
     loader.setAttribute("style", "display: none;");

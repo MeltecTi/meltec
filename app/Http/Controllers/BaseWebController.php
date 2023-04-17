@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BaseWeb;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +27,7 @@ class BaseWebController extends Controller
         $user = Auth::user();
         $token = $token = str_replace('Bearer ', '', $request->header('Authorization'));
 
-        if($user->api_token !== $token || !$user->isAdmin()) {
+        if ($user->api_token !== $token || !$user->isAdmin()) {
             return response()->json([
                 'error' => 'Acceso no autorizado al recurso, se informara al Administrador',
                 'user' => $user,
@@ -39,7 +41,6 @@ class BaseWebController extends Controller
             'data' => $resouces,
             'success' => 'true',
         ], 200);
-        
     }
 
     /**
@@ -79,29 +80,52 @@ class BaseWebController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = Auth::user();
-        $token = str_replace('Bearer ', '', $request->header('Authorization'));
+        try {
 
-        if($user->api_token !== $token || !$user->isAdmin() ){
+            $user = Auth::user();
+            $token = str_replace('Bearer ', '', $request->header('Authorization'));
+
+            if ($user->api_token !== $token || !$user->isAdmin()) {
+                throw new AuthorizationException('Error de Autorización', 403);
+            }
+
+            $resource = BaseWeb::find($id);
+            $data = $request->json()->all();
+
+            if (Str::contains(json_encode($data), 'component')) {
+                $resource->component = urldecode($data['component']);
+            } else if (Str::contains(json_encode($data), 'content')) {
+                $resource->content = urldecode($data['content']);
+            } else if(Str::contains(json_encode($data), 'type')){
+                $resource->type_component = urldecode($data['type']);
+            }
+
+            $update = $resource->update();
+
+            if (!$update) {
+                throw new Exception('Error al almacenar los nuevos datos');
+            }
+
             return response()->json([
-                'error' => 'No autorizado',
+                'success' => true,
+                'message' => 'Cambios agregados correctamente',
+            ], 200);
+
+        } catch (Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ], 500);
+
+        } catch (AuthorizationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
             ], 403);
         }
-
-        $resource = BaseWeb::find($id);
-        $data = $request->json()->all();
-
-        if(Str::contains(json_encode($data), 'component')) {
-            $resource->component = urldecode($data['component']);
-        } else {
-            $resource->content = urldecode($data['content']);
-        }
-
-
-        dd($resource->update());
-
-        
-        // return response()->json([], 200);
     }
 
     /**

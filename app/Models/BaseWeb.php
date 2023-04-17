@@ -11,5 +11,11 @@ class BaseWeb extends Model implements Auditable
     use HasFactory;
     use  \OwenIt\Auditing\Auditable;
     protected $table = 'base_web';
-    protected $fillable = ['component', 'content'];
+    protected $fillable = ['component', 'content', 'type_component'];
+
+    public function getContentByName(string $component) 
+    {
+        $content = $this->query()->get()->where('component', $component)->first();
+        return $content->content;
+    }
 }

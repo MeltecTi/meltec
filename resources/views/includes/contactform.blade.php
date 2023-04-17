@@ -44,7 +44,7 @@
                         ) !!}
                     </div>
 
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         {!! Form::select(
                             'mark',
                             ['Marca Interesada', $marcaspluck],
@@ -71,7 +71,7 @@
                             ],
                         ) !!}
 
-                    </div>
+                    </div> --}}
                     <div class="col-12">
                         {!! Form::textarea('message', null, [
                             'class' => 'form-control border-0 bg-light px-4 py-3',

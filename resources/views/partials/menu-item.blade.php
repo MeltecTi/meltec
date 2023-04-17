@@ -7,9 +7,7 @@
         <div class="dropdown-menu m-0">
             @foreach ($item['submenu'] as $submenu)
                 @if ($submenu['submenu'] == [])
-                    <a href="{{ url($item['slug'], [
-                        'slug' => $submenu['id'],
-                    ]) }}"
+                    <a href="{{ url( $submenu['slug']) }}"
                         class="dropdown-item">{{ $submenu['name'] }}
                     </a>
                 @else

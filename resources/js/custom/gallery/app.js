@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!request.ok) {
                 throw new Error("Hubo un error en obtener los datos");
-                return;
             }
 
             const result = await request.json();

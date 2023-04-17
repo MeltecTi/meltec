@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('component')->unique();
             $table->text('content');
+            $table->string('type_component');
             $table->timestamps();
         });
     }

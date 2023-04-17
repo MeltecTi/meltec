@@ -34,12 +34,7 @@
                                 <tr>
                                     <td class="text-capitalize">{{ _($menu->name) }}</td>
                                     <td class="text-lowercase">
-                                        @if ($menu->parent > 0)
-                                            <a href="{{ url($menu->parentMenu->slug . '/' . $menu->id) }}" target="_blank">
-                                                {{ $menu->parentMenu->slug . '/' . $menu->slug }} </a>
-                                        @else
-                                            <a href="{{ url($menu->slug) }}" target="_blank">{{ $menu->slug }}</a>
-                                        @endif
+                                        <a href="{{ url($menu->slug) }}" target="_blank">{{ $menu->slug }}</a>
                                     </td>
                                     <td class="text-capitalize">
                                         {{ $menu->parentMenu != '' ? $menu->parentMenu->name : _('/') }}
@@ -83,7 +78,7 @@
 @endsection
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" id="myModal">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">

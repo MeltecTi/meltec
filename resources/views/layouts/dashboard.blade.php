@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="api-token" content="{{ auth()->user()->api_token }}" >
+    <meta name="api-token" content="{{ auth()->user()->api_token }}">
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
@@ -15,7 +15,6 @@
 
     <!-- plugins:css -->
     <link rel="stylesheet" href="">
-
 
     <!-- endinject -->
 
@@ -26,7 +25,8 @@
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -60,12 +60,10 @@
             </div>
 
         </div>
-
-
-
     </div>
 
     @include('includes.dashboard.scripts')
+    
 </body>
 
 </html>
