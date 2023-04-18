@@ -21,12 +21,7 @@
                     <div class="position-relative h-100">
                         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                @foreach ($page->galleries as $image)
-                                    <div class="carousel-item active">
-                                        <img src="{{ asset('storage/gallery/' . $image->file) }}" class="d-block w-100"
-                                            alt="...">
-                                    </div>
-                                @endforeach
+                                
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
                                 data-bs-slide="prev">

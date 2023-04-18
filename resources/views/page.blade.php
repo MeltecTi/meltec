@@ -24,12 +24,12 @@
                     <div class="position-relative h-100">
                         @if (count($dataExtra->galleries) === 0)
                             <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                                src="https://fastly.picsum.photos/id/40/4106/2806.jpg?hmac=MY3ra98ut044LaWPEKwZowgydHZ_rZZUuOHrc3mL5mI"
+                                src="https://assets.website-files.com/5e1652731cfa696ddc109232/5f6b6650cb21f3704224a05a_meltec_logo.png"
                                 style="object-fit: cover;">
                         @endif
                         @foreach ($dataExtra->galleries as $gallery)
                             <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                                src="https://fastly.picsum.photos/id/3/5000/3333.jpg?hmac=GDjZ2uNWE3V59PkdDaOzTOuV3tPWWxJSf4fNcxu4S2g"
+                                src="{{ asset('storage/gallery/' . $gallery->file) }}"
                                 style="object-fit: cover;">
                         @endforeach
                     </div>
