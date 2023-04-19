@@ -4,6 +4,7 @@
 use App\Models\Blog;
 use App\Models\Menu;
 use App\Models\City;
+use App\Models\BaseWeb;
 
 // Controllers
 use App\Http\Controllers\AdvantagesController;
@@ -18,7 +19,8 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GalleriesController;
-use App\Models\BaseWeb;
+
+
 // Supports
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,23 +37,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**
+ * Constantes declaradas
+ */
+
+const FORMATED_REPLACE = ['<p>', '</p>', '<a>', '</a>'];
+const PAGE_CONTACT = 'Contáctanos';
+
+/**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
  */
 
 Route::get('/', function () {
     $baseWeb = new BaseWeb();
-
-    $instagramUrl = str_replace(['<p>', '</p>', '<a>', '</a>'], '', $baseWeb->getContentByName('instagram'));
-
-
-    return view('index', compact('instagramUrl'));
+    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));    
+    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
+    return view('index', compact('instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
 });
-
-// Route::get('/contacto', function () {
-//     $menu = new Menu();
-//     $page = $menu->getIdByNamePage('Contacto');
-
-// });
 
 
 Route::get('blogs/{id}', function ($id) {
@@ -60,81 +64,51 @@ Route::get('blogs/{id}', function ($id) {
     return view('blogs.blog', compact('blog', 'title'));
 });
 
-// Route::get('/marcas', function() {
-//     $menu = new Menu();
-//     $page = $menu->getIdByNamePage('Marcas');
-//     $idPage = $page->id;
+// Rutas de autenticacion
+Auth::routes();
 
-//     $marksItems = $menu->getElementsParentMenu($idPage);
-
-//     return view('marks.index', compact('page', 'marksItems'));
-// });
-
-// Route::get('/marcas/{id}', function($id) {
-//     $page = Menu::with(['galleries'])->find($id) ;
-//     $title = $page->name;
-//     return view('marks.mark', compact('page', 'title'));
-// });
-
-// Route::get('/industrias', function() {
-//     $industrias = new Menu();
-//     $page = $industrias->getIdByNamePage('Industrias');
-//     $idPage = $page->id;
-//     $industriesItems = $industrias->getElementsParentMenu($idPage);
-//     return view('industry.index', compact('page', 'industriesItems'));
-
-// });
-
-// Route::get('industrias/{id}', function ($id) {
-//     $page = Menu::with(['galleries', 'advantages'])->find($id);
-//     $title = $page->name;
-//     return view('industry.page', compact('title', 'page'));
-// });
-
-// Route::get('/meltec', function() {
-//     $menu = new Menu();
-//     $page = $menu->getIdByNamePage('Meltec');
-//     $meltecItems = $menu->getElementsParentMenu($page->id);
-//     return view('meltec.index', compact('page', 'meltecItems'));
-// });
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/{slug?}', function ($slug) {
     $menu = new Menu();
+    $baseWeb = new BaseWeb();
     $page = $menu->getIdByNamePage($slug);
 
-    if($page === null){
-        abort(404);
-    }
+    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
+    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
 
     $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
     $parentPages = $menu->getElementsParentMenu($page->id);
 
-    if ($page->name === 'Contáctanos') {
+    if ($page === null) {
+        abort(404);
+    }
+   
+
+    if ($page->name === PAGE_CONTACT) {
         $cities = City::all();
 
-        return view('contact', compact('page', 'cities'));
+        return view('contact', compact('page', 'cities', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
     }
 
     if ($page->name === 'Blogs') {
         $blogsAll = Blog::get()->sortByDesc('created_at');
         $title = 'Blog y Noticias Meltec';
-        return view('blogs', compact('blogsAll', 'title'));
+        return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
     }
 
-    return view('page', compact('page', 'dataExtra', 'parentPages'));
+    
+
+    return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
 });
 
 /**
  * Administrador del sitio web, rutas del Dashboard controladas por el Controlador
  * Rutas Protegidas por autenticacion
  */
-
-// Rutas de autenticacion
-Auth::routes();
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
