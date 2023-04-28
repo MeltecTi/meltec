@@ -11,8 +11,8 @@
 
             @foreach ($menus as $key => $item)
                 @if ($item['parent'] != 0)
-                @break
-            @endif
+                    @break
+                @endif
             @include('partials.menu-item', ['item' => $item])
         @endforeach
 

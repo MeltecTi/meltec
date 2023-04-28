@@ -50,7 +50,7 @@ const PAGE_CONTACT = 'Contáctanos';
 Route::get('/', function () {
     $baseWeb = new BaseWeb();
     $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
-    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));    
+    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
     $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
     $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
     $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
@@ -69,41 +69,6 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/{slug?}', function ($slug) {
-    $menu = new Menu();
-    $baseWeb = new BaseWeb();
-    $page = $menu->getIdByNamePage($slug);
-
-    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
-    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
-    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
-    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
-    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
-
-    $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
-    $parentPages = $menu->getElementsParentMenu($page->id);
-
-    if ($page === null) {
-        abort(404);
-    }
-   
-
-    if ($page->name === PAGE_CONTACT) {
-        $cities = City::all();
-
-        return view('contact', compact('page', 'cities', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-    }
-
-    if ($page->name === 'Blogs') {
-        $blogsAll = Blog::get()->sortByDesc('created_at');
-        $title = 'Blog y Noticias Meltec';
-        return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-    }
-
-    
-
-    return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-});
 
 /**
  * Administrador del sitio web, rutas del Dashboard controladas por el Controlador
@@ -121,4 +86,47 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/gallery', GalleriesController::class);
     Route::resource('home/ventajas', AdvantagesController::class);
     Route::resource('home/ciudades', CitiesController::class);
+    Route::get('home/test', function () {
+        return view('test');
+    });
+});
+
+
+/**
+ * Condicional para la visualizacion del sitio web en front
+ */
+
+Route::get('/{slug?}', function ($slug) {
+    $menu = new Menu();
+    $baseWeb = new BaseWeb();
+    $page = $menu->getIdByNamePage($slug);
+
+    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
+    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
+
+    $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
+    $parentPages = $menu->getElementsParentMenu($page->id);
+
+    if ($page === null) {
+        abort(404);
+    }
+
+    if ($page->name === PAGE_CONTACT) {
+        $cities = City::all();
+
+        return view('contact', compact('page', 'cities', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+    }
+
+    if ($page->name === 'Blogs') {
+        $blogsAll = Blog::get()->sortByDesc('created_at');
+        $title = 'Blog y Noticias Meltec';
+        return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+    }
+
+
+
+    return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
 });

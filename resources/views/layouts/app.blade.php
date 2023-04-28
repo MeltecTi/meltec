@@ -20,7 +20,8 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 
     <!-- Scripts Iniciales -->
@@ -28,12 +29,14 @@
 </head>
 
 <body>
+
+    
     <!-- Spinner Start -->
     @include('includes.spiner')
     <!-- Spinner End -->
 
     {{-- Condicion si el usuario esta logeado --}}
-    @if(Auth::check())
+    @if (Auth::check())
         @include('includes.toolbar-login')
     @endif
     {{-- Fin condicion --}}
@@ -46,25 +49,25 @@
 
         {{-- Navbar Start --}}
         @include('includes.navbar')
-        
-    {{-- Navbar End --}}
 
-    @yield('content-header')
-</div>
+        {{-- Navbar End --}}
 
-{{-- Search --}}
-@include('includes.search')
-
-<main class="py-4">
-    <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
-        @yield('content')
+        @yield('content-header')
     </div>
-</main>
 
-@include('includes.footer')
+    {{-- Search --}}
+    @include('includes.search')
 
-{{-- Librerias y Scrips --}}
-@include('includes.scripts')
+    <main class="py-4">
+        <div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s">
+            @yield('content')
+        </div>
+    </main>
+
+    @include('includes.footer')
+
+    {{-- Librerias y Scrips --}}
+    @include('includes.scripts')
 
 </body>
 

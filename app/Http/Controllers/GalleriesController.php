@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Gallery;
 use App\Models\Menu;
+use Nette\Utils\Image;
+use App\Models\Gallery;
+
 use Illuminate\Http\Request;
 
 class GalleriesController extends Controller

@@ -40,8 +40,6 @@
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link"
                                 href="{{ route('roles.index') }}">{{ _('Roles de Usuario') }}</a></li>
-                        <li class="nav-item"> <a class="nav-link"
-                                href="{{ route('roles.create') }}">{{ _('Añadir Rol') }}</a></li>
                     </ul>
                 </div>
             </li>

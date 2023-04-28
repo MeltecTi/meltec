@@ -30,6 +30,7 @@
     <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite(['resources/js/app.js'])
     @viteReactRefresh
 </head>
@@ -63,7 +64,7 @@
     </div>
 
     @include('includes.dashboard.scripts')
-    
+
 </body>
 
 </html>

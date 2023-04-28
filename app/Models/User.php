@@ -61,4 +61,14 @@ class User extends Authenticatable
     {
         return $this->hasRole(['Administrador', 'SuperAdministrador']);
     }
+
+    public function isGerente(): bool
+    {
+        return $this->hasRole(['Gerencial']);
+    }
+
+    public function kpiViewAuthorization(): bool
+    {
+        return $this->hasRole(['Administrador', 'SuperAdministrador', 'Gerencial']);
+    }
 }
