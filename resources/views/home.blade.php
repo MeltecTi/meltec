@@ -45,6 +45,5 @@
                 </div>
             </div>
         </div>
-    </div>
 @endsection
-@vite(['resources/js/homeapisap.js']);
+@vite(['resources/js/newsapapi.js'])

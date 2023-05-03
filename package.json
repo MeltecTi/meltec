@@ -6,17 +6,26 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
-        "axios": "^1.1.2",
+        "axios": "^1.3.6",
         "bootstrap": "^5.2.3",
+        "http-proxy-middleware": "^2.0.6",
         "laravel-vite-plugin": "^0.7.2",
         "sass": "^1.56.1",
         "vite": "^4.0.0"
     },
     "dependencies": {
         "@vitejs/plugin-react": "^3.1.0",
+        "chart.js": "^4.2.1",
+        "dotenv": "^16.0.3",
+        "envy": "^2.0.0",
+        "express": "^4.18.2",
         "react": "^18.2.0",
         "react-bootstrap": "^2.7.2",
         "react-dom": "^18.2.0",
-        "toastify-js": "^1.12.0"
+        "request": "^2.88.2",
+        "socket.io": "^4.6.1",
+        "socketio": "^1.0.0",
+        "toastify-js": "^1.12.0",
+        "xml2js": "^0.5.0"
     }
 }

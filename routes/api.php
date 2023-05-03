@@ -69,3 +69,27 @@ Route::middleware('auth:api')->get('/user', function( Request $request ) {
         'admin' => $isAdmin,
     ]);
 });
+
+/**
+ * Rutas de Sap
+ */
+
+ Route::get('/sapData', function() {
+    $data = file_get_contents(env('LOCALHOST_NODEJS'));
+    return response($data)->header('Content-Type', 'application/json');
+});
+
+Route::get('/ventasDia', function(){
+    $data = file_get_contents('http://localhost:3000/ventasDia');
+    return response($data)->header('Content-Type', 'application/json');
+});
+
+Route::get('/ventasDiaAnterior', function() {
+    $data = file_get_contents('http://localhost:3000/ventasDiaAnterior');
+    return response($data)->header('Content-Type', 'application/json');
+});
+
+Route::get('/ventasSemanales', function() {
+    $data = file_get_contents('http://localhost:3000/ventasSemanales');
+    return response($data)->header('Content-Type', 'application/json');
+});

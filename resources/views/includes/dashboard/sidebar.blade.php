@@ -53,6 +53,26 @@
 
             {{-- Fin Elementos Administrativos --}}
         @endif
+
+        {{-- Elementos de informes SAP --}}
+        @if (auth()->user()->kpiViewAuthorization())
+            <li class="nav-item nav-category">{{ _('Informes SAP') }}</li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="collapse" href="#ui-informes" aria-expanded="false"
+                    aria-controls="ui-informes">
+                    <i class="menu-icon mdi mdi mdi-file-document"></i>
+                    <span class="menu-title">{{ _('Informes') }}</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-informes">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"> <a class="nav-link"
+                                href="{{ url('/home/reports') }}">{{ _('Informe de reportes SAP') }}</a></li>
+                    </ul>
+                </div>
+            </li>
+        @endif
+        {{-- Fin Elementos de informes SAP --}}
         {{-- Administrador de sitio --}}
 
         <li class="nav-item nav-category">{{ _('Administrador del Sitio') }}</li>
@@ -112,7 +132,11 @@
             </a>
         </li>
     </ul>
-    <a class="dropdown-item" href="{{ route('logout') }}"><i
-            class="dropdown-item-icon mdi mdi-power text-primary me-2"></i> {{ _('Cerrar Sesion') }}
-    </a>
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('logout') }}">
+            <i class="dropdown-item-icon mdi mdi-power"></i> 
+            <span class="menu-title">{{ _('Cerrar Sesion') }}</span>
+        </a>
+    </li>
 </nav>

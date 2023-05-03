@@ -86,10 +86,23 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/gallery', GalleriesController::class);
     Route::resource('home/ventajas', AdvantagesController::class);
     Route::resource('home/ciudades', CitiesController::class);
-    Route::get('home/test', function () {
-        return view('test');
+
+    /**
+     * Rutas de Reportes de SAP
+     */
+
+    Route::get('home/reports', function () {
+        return view('reports.index', [
+            'title' => 'Informe de reportes SAP'
+        ]);
+    });
+    Route::get('home/reports/ventas', function() {
+        return view('reports.ventas', [
+            'title' => 'Reporte de Ventas Año '.date('Y')
+        ]);
     });
 });
+
 
 
 /**
