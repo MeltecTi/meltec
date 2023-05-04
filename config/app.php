@@ -186,8 +186,8 @@ return [
          * Package Service Providers...
          */
 
-        // Debugbar
-        Barryvdh\Debugbar\ServiceProvider::class,
+        // Debugbar (Desactivar en produccion)
+        // Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Application Service Providers...
