@@ -19,7 +19,7 @@
     <!-- endinject -->
 
     <!-- inject:css -->
-    @vite(['resources/css/vertical-layout-light/style.css', 'resources/js/select.dataTables.min.css', 'resources/vendors/datatables.net-bs4/dataTables.bootstrap4.css', 'resources/vendors/css/vendor.bundle.base.css', 'resources/vendors/simple-line-icons/css/simple-line-icons.css', 'resources/vendors/typicons/typicons.css', 'resources/vendors/ti-icons/css/themify-icons.css', 'resources/vendors/mdi/css/materialdesignicons.min.css', 'resources/vendors/feather/feather.css'])
+    @vite(['resources/css/vertical-layout-light/style.css', 'resources/vendors/css/vendor.bundle.base.css', 'resources/vendors/simple-line-icons/css/simple-line-icons.css', 'resources/vendors/typicons/typicons.css', 'resources/vendors/ti-icons/css/themify-icons.css', 'resources/vendors/mdi/css/materialdesignicons.min.css', 'resources/vendors/feather/feather.css'])
     <!-- endinject -->
     <link rel="shortcut icon" href="{{ asset('img/logos/Meltec.png') }}" />
 </head>

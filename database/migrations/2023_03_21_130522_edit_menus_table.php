@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('menus', function (Blueprint $table) {
             $table->dropColumn('description');
-            $table->bigInteger('gallery_id')->after('content');
+            $table->bigInteger('gallery_id')->after('content')->nullable();
         });
     }
 

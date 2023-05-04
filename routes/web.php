@@ -59,9 +59,16 @@ Route::get('/', function () {
 
 
 Route::get('blogs/{id}', function ($id) {
+    $baseWeb = new BaseWeb();
+    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
+    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
+
     $blog = Blog::find($id);
     $title = $blog->title;
-    return view('blogs.blog', compact('blog', 'title'));
+    return view('blogs.blog', compact('blog', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
 });
 
 // Rutas de autenticacion
@@ -96,9 +103,9 @@ Route::group(['middleware' => ['auth']], function () {
             'title' => 'Informe de reportes SAP'
         ]);
     });
-    Route::get('home/reports/ventas', function() {
+    Route::get('home/reports/ventas', function () {
         return view('reports.ventas', [
-            'title' => 'Reporte de Ventas Año '.date('Y')
+            'title' => 'Reporte de Ventas Año ' . date('Y')
         ]);
     });
 });

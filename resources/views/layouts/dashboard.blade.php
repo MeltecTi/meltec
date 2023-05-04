@@ -19,7 +19,7 @@
     <!-- endinject -->
 
     <!-- inject:css -->
-    @vite(['resources/css/vertical-layout-light/style.css', 'resources/js/select.dataTables.min.css', 'resources/vendors/datatables.net-bs4/dataTables.bootstrap4.css', 'resources/vendors/css/vendor.bundle.base.css', 'resources/vendors/simple-line-icons/css/simple-line-icons.css', 'resources/vendors/typicons/typicons.css', 'resources/vendors/ti-icons/css/themify-icons.css', 'resources/vendors/mdi/css/materialdesignicons.min.css', 'resources/vendors/feather/feather.css', 'resources/css/spiner.css', 'resources/css/loader.css', 'resources/css/403.css'])
+    @vite(['resources/css/vertical-layout-light/style.css', 'resources/vendors/css/vendor.bundle.base.css', 'resources/vendors/simple-line-icons/css/simple-line-icons.css', 'resources/vendors/typicons/typicons.css', 'resources/vendors/ti-icons/css/themify-icons.css', 'resources/vendors/mdi/css/materialdesignicons.min.css', 'resources/vendors/feather/feather.css', 'resources/css/spiner.css', 'resources/css/loader.css', 'resources/css/403.css'])
     <!-- endinject -->
     <link rel="shortcut icon" href="images/favicon.png" />
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
@@ -31,6 +31,7 @@
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/37.1.0/classic/ckeditor.js"></script>
     @vite(['resources/js/app.js'])
     @viteReactRefresh
 </head>

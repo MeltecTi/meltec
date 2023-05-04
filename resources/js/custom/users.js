@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dataform.append('roles[]', rolesField.value);
 
 
-        const url = `http://localhost:8000/home/usuarios`;
+        const url = `/home/usuarios`;
 
         try {
 
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     allowEscapeKey: false,
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.assign('http://localhost:8000/home/usuarios')
+                        window.location.assign('/home/usuarios')
                     }
                 })
             }
