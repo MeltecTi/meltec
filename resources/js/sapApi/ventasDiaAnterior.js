@@ -1,7 +1,9 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
-    const tituloDiaAnterior = document.querySelector("#tituloDiaAnterior");
     const diaAnterior = document.querySelector("#diaAnterior");
+
+    const ventasHDiaAnteriorValorTotal = document.querySelector('#ventasHDiaAnteriorValorTotal');
+
     const options = {
         style: "currency",
         currency: "COP",
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "es-CO",
             options
         );
-        tituloDiaAnterior.textContent = `Total de la venta del dia anterior: ${formatted}`;
+        ventasHDiaAnteriorValorTotal.textContent = formatted;
 
         graficaDiaAnterior(resumenVentasVendedorDiaAnterior);
     }
@@ -73,18 +75,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const labels = Object.keys(data);
         const values = Object.values(data).map((item) => item.KCNT_REVENUE);
 
+        
+        const valores = {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Total Vendido",
+                    data: values,
+                    backgroundColor: ["#DC3545"],
+                },
+            ],
+        }
+        
         const chart = new Chart(diaAnterior, {
             type: "bar",
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "Total Vendido",
-                        data: values,
-                        backgroundColor: ["#DC3545"],
-                    },
-                ],
-            },
+            data: valores,
             options: {
                 indexAxis : 'y',
                 animation: {
@@ -105,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         return delay;
                     },
                 },
-                responsive: true,
+                responsive: false,
                 plugins: {
                     legend: {
                         position: "top",

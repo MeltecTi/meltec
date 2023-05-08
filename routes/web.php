@@ -103,13 +103,17 @@ Route::group(['middleware' => ['auth']], function () {
             'title' => 'Informe de reportes SAP'
         ]);
     });
-    Route::get('home/reports/ventas', function () {
-        return view('reports.ventas', [
-            'title' => 'Reporte de Ventas Año ' . date('Y')
-        ]);
-    });
 });
 
+/**
+ * Rutas de Informes (No es necesario loggearse)
+ */
+
+Route::get('reportesSapMeltec/reports/ventas'.date('Y'), function () {
+    return view('reports.ventas', [
+        'title' => 'Reporte de Ventas Año ' . date('Y')
+    ]);
+});
 
 
 /**

@@ -1,7 +1,13 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
-    const sapdata = document.querySelector("#sapdata");
     const $grafica = document.querySelector("#grafica");
+    
+    const progressBar = document.querySelector('#progressBar');
+
+    const options = {
+        style: "currency",
+        currency: "COP",
+    };
 
     async function getData() {
         const url = `/api/sapData`;
@@ -10,78 +16,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const res = await request.json();
             let result = res.results;
-            constructorOdataSap(result);
+            constructProgressbar(result);
         } catch (error) {
             console.error(error);
         }
     }
 
-    function constructorOdataSap(result) {
-        limpiardiv();
 
-        const options = {
-            style: "currency",
-            currency: "COP",
-        };
+    function constructProgressbar(result) {
+        limpiarProgressBar();
 
-        const {
-            CurrentValueText,
-            TargetValue,
-            CurrentValue,
-            TargetDeltaPct,
-        } = result;
+        const { CurrentValue, TargetDeltaPct } = result;
 
-        // Titulo de la oData
-        const h2Tile = document.createElement("H4");
-        h2Tile.textContent = CurrentValueText;
+        const porcentajeAbsoluto = Math.abs(TargetDeltaPct);
+        const porcentajeActual = 100 - porcentajeAbsoluto;
 
-        // Meta principal del mes
-        const metaMes = TargetValue;
-        const metaMesFormatted = Number(metaMes).toLocaleString(
-            "es-CO",
-            options
-        );
+        const bar = document.createElement('DIV');
+        bar.classList.add('progress-bar', 'progress-bar-striped', 'progress-bar-animated', 'fs-5');
+        bar.setAttribute('style', `width: ${porcentajeActual.toFixed(2)}%`)
+        bar.textContent = `${porcentajeActual.toFixed(2)}% - ${Number(CurrentValue).toLocaleString('es-CO', options)}`
 
-        const metaMesDisplay = document.createElement("P");
-        metaMesDisplay.textContent = metaMesFormatted;
+        progressBar.setAttribute('aria-valuenow', porcentajeActual.toFixed(2) );
+        progressBar.appendChild(bar);
 
-        /**
-         * Valores de venta actuales
-         */
-
-        const h3VentasAct = document.createElement("H4");
-        h3VentasAct.textContent = `Ventas al dia ${new Date().toLocaleString()}`;
-        const ventasActualValue = Number(CurrentValue).toLocaleString(
-            "es-co",
-            options
-        );
-        const ventasActualValueDisplay = document.createElement("P");
-        ventasActualValueDisplay.textContent = `${ventasActualValue} - ${
-            (100 - Math.abs(TargetDeltaPct)).toFixed(2)
-        } %`;
-
-        /**
-         * Porcentaje de venta con respecto al faltante en año actual
-         */
-
-        const h3Porcentaje = document.createElement("H4");
-        h3Porcentaje.textContent = `Porcentaje Faltante`;
-
-        const porcentajeVentaRestante = document.createElement("P");
-        porcentajeVentaRestante.textContent = `${Math.abs(TargetDeltaPct)}%`;
-
-        /**
-         * Mostrar en pantalla los valores
-         */
-
-        sapdata.appendChild(h2Tile);
-        sapdata.appendChild(metaMesDisplay);
-        sapdata.appendChild(h3VentasAct);
-        sapdata.appendChild(ventasActualValueDisplay);
-        sapdata.appendChild(h3Porcentaje);
-        sapdata.appendChild(porcentajeVentaRestante);
-
-        graficarData(result);
     }
 
     getData();
@@ -210,9 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const chart = Chart.getChart($grafica);
         chart.destroy();
     }
-    function limpiardiv() {
-        while (sapdata.firstChild) {
-            sapdata.removeChild(sapdata.firstChild);
+    function limpiarProgressBar() {
+        while (progressBar.firstChild) {
+            progressBar.removeChild(progressBar.firstChild);
         }
     }
 });

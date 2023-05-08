@@ -65,17 +65,30 @@ setInterval(getVentasDia, 5000);
 
 let ventasDiaAnteriorvalue = "";
 function ventasDiaAnterior() {
-    let datenow = new Date();
-    datenow.setDate(datenow.getDate() - 1);
+    function obtenerDiaAnterior() {
+        const hoy = new Date();
+        const diaSemana = hoy.getDay();
+
+        if (diaSemana === 1) {
+            hoy.setDate(hoy.getDate() - 3);
+        } else if (diaSemana === 0) {
+            hoy.setDate(hoy.getDate() - 2);
+        } else {
+            hoy.setDate(hoy.getDate() - 1);
+        }
+
+        return hoy;
+    }
+
+    let datenow = obtenerDiaAnterior();
     datenow.setHours(0, 0, 0, 0);
     let formmatedDateNow = datenow.toISOString().slice(0, 19);
-
+    
     const options = {
         method: "GET",
         url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formmatedDateNow}'&$format=json`,
         auth: credentials,
     };
-
     axios(options)
         .then((response) => {
             ventasDiaAnteriorvalue = response.data.d;
@@ -129,11 +142,66 @@ function ventasSemanales() {
         })
         .catch((error) => {
             console.error(error);
-        })
+        });
 }
 
 ventasSemanales();
 setInterval(ventasSemanales, 5000);
+
+
+/**
+ * Ventas Semana anterior a la semana pasada
+ */
+let ventasSemanaAnteriorAnteriorValue = '';
+function ventasSemanaAnteriorAnterior() {
+
+    // Funcion para obtener la semana anterior a la semana pasada
+    function SemanaAnterior() {
+        const hoy = new Date();
+        const dateSemanaPasada = new Date(hoy.getTime() - 7 * 24 * 60 * 60 *1000);
+        const semanaPasada = new Date(dateSemanaPasada.getTime() - 7 *24 * 60 * 60 * 1000);
+        return semanaPasada;
+    }
+
+    // Ultimo dia de la semana anterior a la semana pasada
+    function lastDay() {
+        const hoy = new Date();
+        const dateSemanaPasada = new Date(hoy.getTime() - 7 * 24 * 60 * 60 *1000);
+        const semanaPasada = new Date(dateSemanaPasada.getTime() - 7 *24 * 60 * 60 * 1000);
+
+        semanaPasada.setDate(semanaPasada.getDate() + 4);
+
+        return semanaPasada;
+    }
+
+    const firstDay = SemanaAnterior();
+    const last = lastDay();
+
+    firstDay.setHours(0, 0, 0, 0);
+    last.setHours(0, 0, 0, 0);
+
+    const dates = {
+        first : firstDay.toISOString().slice(0, 19),
+        lasted: last.toISOString().slice(0, 19)
+    }
+    
+    const options = {
+        method: 'GET',
+        url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${dates.first}' and CDOC_INV_DATE le datetime'${dates.lasted}'`,
+        auth: credentials,
+    }
+
+    axios(options)
+        .then((response) => {
+            ventasSemanaAnteriorAnteriorValue = response.data.d;
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+ventasSemanaAnteriorAnterior()
+setInterval(ventasSemanaAnteriorAnterior, 5000);
 
 /**
  * Url para la Api y conectar con LARAVEL
@@ -151,9 +219,13 @@ app.get("/ventasDiaAnterior", (req, res) => {
     res.send(JSON.stringify(ventasDiaAnteriorvalue.results));
 });
 
-app.get('/ventasSemanales', (req, res) => {
+app.get("/ventasSemanales", (req, res) => {
     res.send(JSON.stringify(VentaSemana.results));
-})
+});
+
+app.get("/ventasSemanaAnteriorAnterior", (req, res) => {
+    res.send(JSON.stringify(ventasSemanaAnteriorAnteriorValue.results));
+}) 
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

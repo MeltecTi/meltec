@@ -54,6 +54,8 @@ export default defineConfig({
                 "resources/js/sapApi/ventasDiaAnterior.js",
                 "resources/js/sapApi/ventasSemana.js",
                 "resources/css/card.css",
+                "resources/js/sapApi/ventas.js",
+                "resources/js/sapApi/ventasSemanaAnterior.js",
             ],
             refresh: true,
         }),
