@@ -27,23 +27,4 @@
                 @endif
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-lg-6 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">{{ _('Grafica de Ventas 2023') }}</h3>
-                        <canvas id="grafica"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">{{ __('Indice de ventas 2023') }}</div>
-                    <div class="card-body" id="sapdata">
-                    </div>
-                </div>
-            </div>
-        </div>
 @endsection
-@vite(['resources/js/newsapapi.js'])

@@ -93,3 +93,8 @@ Route::get('/ventasSemanales', function() {
     $data = file_get_contents('http://localhost:3000/ventasSemanales');
     return response($data)->header('Content-Type', 'application/json');
 });
+
+Route::get('/ventasSemanaAnteriorPasada', function() {
+    $data = file_get_contents('http://localhost:3000/ventasSemanaAnteriorAnterior');;
+    return response($data)->header('Content-Type', 'application/json');
+});

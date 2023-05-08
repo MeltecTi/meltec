@@ -1,8 +1,7 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
-    const ventasSemana = document.querySelector("#ventasSemana");
-
-    const ventaSemanalValorTotal = document.querySelector('#ventaSemanalValorTotal');
+    const SemanaAnterior = document.querySelector("#SemanaAnterior");
+    const ventasSemanaAnterior = document.querySelector('#ventasSemanaAnterior');
 
     const options = {
         style: "currency",
@@ -10,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function getData() {
-        const url = "/api/ventasSemanales";
+        const url = `/api/ventasSemanaAnteriorPasada`;
         try {
             const request = await fetch(url);
             const result = await request.json();
@@ -21,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function constructResult(datas) {
-        let totalVentaSemanal = 0;
+        let totalVentaSemanaAnterior = 0;
 
         /**
          * Obtener la sumatoria de todas las ventas al mes de los diferentes vendedores
@@ -44,16 +43,17 @@ document.addEventListener("DOMContentLoaded", () => {
         datas.forEach((data) => {
             const { KCNT_REVENUE } = data;
 
-            totalVentaSemanal += parseFloat(KCNT_REVENUE);
+            totalVentaSemanaAnterior += parseFloat(KCNT_REVENUE);
         });
 
-        const formateado = Number(totalVentaSemanal).toLocaleString(
+        const formateado = Number(totalVentaSemanaAnterior).toLocaleString(
             "es-CO",
             options
         );
-        ventaSemanalValorTotal.textContent = formateado;
 
-        graficaSemana(resumenVentasSemana);
+        SemanaAnterior.textContent = formateado;
+
+        graficarSemana(resumenVentasSemana);
     }
 
     getData();
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {resumenVentasSemana} : Datos resumidos y concatenados de las diferentes ventas Semanales
      */
 
-    function graficaSemana(resumenVentasSemana) {
+    function graficarSemana(resumenVentasSemana) {
         let delayed;
 
         const data = resumenVentasSemana;
@@ -76,16 +76,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 {
                     label: "Total Vendido",
                     data: values,
-                    backgroundColor: ["#4C9EFF", "#DC3545" , '#ee1ed0', '#724b0b', '#2d521d', '#e15346', '#4d0ed5', '#018611', '#1c8398', '#83de11'],
+                    backgroundColor: [
+                        "#4C9EFF",
+                        "#DC3545",
+                        "#ee1ed0",
+                        "#724b0b",
+                        "#2d521d",
+                        "#e15346",
+                        "#4d0ed5",
+                        "#018611",
+                        "#1c8398",
+                        "#83de11",
+                    ],
                 },
             ],
         };
 
-        const chart = new Chart(ventasSemana, {
+        const chart = new Chart(ventasSemanaAnterior, {
             type: "pie",
             data: dataGrafica,
             options: {
-                responsive: false,          
+                responsive: false,
             },
         });
 
@@ -101,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(getData, 300000);
 
     function destroyGrafica() {
-        const chart = Chart.getChart(ventasSemana);
+        const chart = Chart.getChart(ventasSemanaAnterior);
         chart.destroy();
     }
 });
