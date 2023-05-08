@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             destroyGrafica();
-        }, 296000);
+        }, 290000);
     }
 
     setInterval(getData, 300000);

@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             destroyGrafica();
-        }, 296000);
+        }, 292000);
     }
 
     setInterval(getDataDiaAnterior, 300000);

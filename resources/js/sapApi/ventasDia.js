@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             destroyGrafica();
-        }, 296000);
+        }, 293000);
     }
 
     setInterval(getVentasMes, 300000);
