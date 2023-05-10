@@ -1,7 +1,9 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", () => {
     const SemanaAnterior = document.querySelector("#SemanaAnterior");
-    const ventasSemanaAnterior = document.querySelector('#ventasSemanaAnterior');
+    const ventasSemanaAnterior = document.querySelector(
+        "#ventasSemanaAnterior"
+    );
 
     const options = {
         style: "currency",
@@ -40,6 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
 
+        const ordenado = Object.entries(resumenVentasSemana)
+            .sort((a, b) => b[1].KCNT_REVENUE - a[1].KCNT_REVENUE)
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+
         datas.forEach((data) => {
             const { KCNT_REVENUE } = data;
 
@@ -53,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         SemanaAnterior.textContent = formateado;
 
-        graficarSemana(resumenVentasSemana);
+        graficarSemana(ordenado);
     }
 
     getData();
@@ -63,10 +72,10 @@ document.addEventListener("DOMContentLoaded", () => {
      * @param {resumenVentasSemana} : Datos resumidos y concatenados de las diferentes ventas Semanales
      */
 
-    function graficarSemana(resumenVentasSemana) {
+    function graficarSemana(ordenado) {
         let delayed;
 
-        const data = resumenVentasSemana;
+        const data = ordenado;
         const labels = Object.keys(data);
         const values = Object.values(data).map((item) => item.KCNT_REVENUE);
 
@@ -93,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const chart = new Chart(ventasSemanaAnterior, {
-            type: "pie",
+            type: "bar",
             data: dataGrafica,
             options: {
                 responsive: false,

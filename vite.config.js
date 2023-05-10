@@ -24,8 +24,6 @@ export default defineConfig({
                 "resources/js/requires/settings.js",
                 "resources/js/requires/todolist.js",
                 "resources/js/requires/dashboard.js",
-                "resources/js/requires/Chart.roundedBarCharts.js",
-                "resources/js/ckeditor/build/ckeditor.js",
                 "resources/js/custom/users.js",
                 "resources/js/custom/deleteuser.js",
                 "resources/js/custom/advantage/index.js",

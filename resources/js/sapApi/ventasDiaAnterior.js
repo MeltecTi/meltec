@@ -2,7 +2,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const diaAnterior = document.querySelector("#diaAnterior");
 
-    const ventasHDiaAnteriorValorTotal = document.querySelector('#ventasHDiaAnteriorValorTotal');
+    const ventasHDiaAnteriorValorTotal = document.querySelector(
+        "#ventasHDiaAnteriorValorTotal"
+    );
 
     const options = {
         style: "currency",
@@ -40,6 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
 
+        const ordenado = Object.entries(resumenVentasVendedorDiaAnterior)
+            .sort((a, b) => b[1].KCNT_REVENUE - a[1].KCNT_REVENUE)
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+
         /**
          * Arreglo para el total de venta del dia anterior
          */
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
         ventasHDiaAnteriorValorTotal.textContent = formatted;
 
-        graficaDiaAnterior(resumenVentasVendedorDiaAnterior);
+        graficaDiaAnterior(ordenado);
     }
 
     getDataDiaAnterior();
@@ -75,7 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const labels = Object.keys(data);
         const values = Object.values(data).map((item) => item.KCNT_REVENUE);
 
-        
         const valores = {
             labels: labels,
             datasets: [
@@ -85,13 +93,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     backgroundColor: ["#DC3545"],
                 },
             ],
-        }
-        
+        };
+
         const chart = new Chart(diaAnterior, {
             type: "bar",
             data: valores,
             options: {
-                indexAxis : 'y',
+                indexAxis: "y",
                 animation: {
                     onComplete: () => {
                         delayed = true;
