@@ -53,6 +53,8 @@ Route::get('/city/edit/{id}', [CitiesController::class, 'edit'])->middleware('au
 Route::get('/audition/{id}', [AuditController::class, 'audition'])->middleware('auth:api');
 Route::get('/roles', [RolController::class, 'roles'])->middleware('auth:api');
 
+Route::post('/usuarios', [UsersController::class, 'store'])->middleware('auth:api');
+
 Route::post('/roles', [RolController::class, 'store'])->middleware('auth:api');
 Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store')->middleware('auth:api');
 Route::post('/city', [CitiesController::class, 'store'])->middleware('auth:api');

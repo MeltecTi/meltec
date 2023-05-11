@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Rols as Role;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Rols as Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class UsersController extends Controller
 {
@@ -53,27 +54,52 @@ class UsersController extends Controller
     public function store(Request $request)
     {
 
-        $input = $request->except('confirm-password');
-        $input['password'] = Hash::make($input['password']);
+        try {
+            $user = auth()->user();
+            $token = str_replace('Bearer ', '', $request->header('Authorization'));
 
-        if (isset($input['image'])) {
-            $filename = $input['image']->hashName();
-            $moveImageUser = $input['image']->move(storage_path('app/public/img'), $filename);
-
-            if ($moveImageUser) {
-                $input['image'] = $filename;
+            if ($user->api_token !== $token || !$user->isAdmin()) {
+                throw new AuthorizationException('Error de violacion de seguridad', 401);
             }
-        }
 
-        $user = User::create($input);
+            $input = $request->except('confirm-password');
+            $input['password'] = Hash::make($input['password']);
 
-        if ($user) {
-            $user->assignRole($request->input('roles'));
+            if (isset($input['image'])) {
+                $filename = $input['image']->hashName();
+                $moveImageUser = $input['image']->move(storage_path('app/public/img'), $filename);
+
+                if ($moveImageUser) {
+                    $input['image'] = $filename;
+                }
+            }
+
+            $user = User::create($input);
+
+            if ($user) {
+                $user->assignRole($request->input('roles'));
+                
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Usuario creado con exito',
+                    'code' => 200,
+                ], 200);
+
+            } else {
+                throw new Exception('Hubo un error al ingresar el usuario, Pongase en contacto con el administrador del sitio', 500);
+            }
+        } catch (AuthorizationException $e) {
             return response()->json([
-                'message' => 'Creado'
-            ]);
-        } else {
-            return response()->json(['message' => 'error']);
+                'success' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ], 401);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ], 500);
         }
     }
 
@@ -148,7 +174,7 @@ class UsersController extends Controller
     public function destroy(string $id)
     {
         $user = User::find($id);
-        
+
         try {
             $user->delete();
             return response()->json([

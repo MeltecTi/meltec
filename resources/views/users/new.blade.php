@@ -86,5 +86,5 @@
             </div>
         </div>
     </div>
-    @vite(['resources/js/custom/users.js'])
 @endsection
+@vite(['resources/js/custom/users.js'])
