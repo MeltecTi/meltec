@@ -32,6 +32,7 @@ class UsersController extends Controller
         $usuarios = User::paginate(10);
 
         $title = 'Usuarios';
+        
         return view('users.index', [
             'usuarios' => $usuarios,
             'title' => $title,

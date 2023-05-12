@@ -19,8 +19,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\GalleriesController;
-
-
+use App\Http\Controllers\WhatsAppController;
 // Supports
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +45,7 @@ const PAGE_CONTACT = 'Contáctanos';
 /**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
  */
+
 
 Route::get('/', function () {
     $baseWeb = new BaseWeb();

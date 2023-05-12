@@ -27,4 +27,23 @@
                 @endif
             </div>
         </div>
+
+        <button type="button" id="enviar" class="btn btn-primary">Enviar Mensaje</button>
+        <script>
+            const enviar = document.querySelector('#enviar');
+            enviar.addEventListener('click', async() => {
+                const url = '/api/apiwhatsapp';
+                const data = new FormData()
+                data.append('number', '3132803746');
+                data.append('message', 'Hola Mundo');
+
+                const request = await fetch(url, {
+                    method: 'POST',
+                    body: data,
+                });
+                const result = await request.json();
+
+                console.log(result);
+            })
+        </script>
 @endsection

@@ -11,7 +11,7 @@ use App\Http\Controllers\BaseWebController;
 use App\Http\Controllers\GalleriesController;
 use App\Http\Controllers\AdvantagesController;
 use App\Http\Controllers\PermissionController;
-
+use App\Http\Controllers\WhatsAppController;
 // Illuminate helpers and request
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
