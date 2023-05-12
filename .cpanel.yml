@@ -2,12 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/melteccom/public_html/
-    - export APP_ENV=production
-    - export APP_DEBUG=false
-    - cp .env.production .env
-    - /otp/cpanel/ea-php81/root/usr/bin/php /opt/cpanel/composer/bin/composer install --no-dev
-    - /opt/cpanel/ea-php81/root/usr/bin/php artisan config:cache
-    - /opt/cpanel/ea-php81/root/usr/bin/php artisan route:cache
-    - /opt/cpanel/ea-php81/root/usr/bin/php artisan view:cache
-    - /opt/cpanel/ea-php81/root/usr/bin/php artisan migrate --force
-    - /opt/cpanel/ea-php81/root/usr/bin/php artisan storage:link
+    - /bin/rsync -av public/ $DEPLOYPATH
