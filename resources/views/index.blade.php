@@ -11,7 +11,7 @@
                     <div class="p-3" style="max-width: 900px;">
                         <h5 class="text-white text-uppercase mb-3 animated slideInDown">{{ _('Innovacion y Tecnologia') }}</h5>
                         <h1 class="display-1 text-white mb-md-4 animated zoomIn">{{ config('app.name') }}</h1>
-                        <a href="{{ url('meltec') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">{{ _('Conocenos') }}</a>
+                        <a href="{{ url('nosotros') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">{{ _('Conocenos') }}</a>
                         <a href="{{ url('contacto') }}" class="btn btn-outline-light py-md-3 px-md-5 animated slideInRight">{{ _('Contactanos') }}</a>
                     </div>
                 </div>
