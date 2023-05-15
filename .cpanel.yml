@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/melteccom/public_html/
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/chmod -R 755 $DEPLOYPATH
+    - /bin/chown -R melteccom:melteccom $DEPLOYPATH
+    - /usr/local/bin/composer install --no-dev -d $DEPLOYPATH
+    - /usr/local/bin/php $DEPLOYPATH/artisan migrate --force
