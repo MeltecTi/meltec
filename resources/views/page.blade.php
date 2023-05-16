@@ -10,7 +10,7 @@
         <div class="container py-5">
             <div class="row g-5 mb-5">
                 <div class="col-lg-7">
-                    <div class="section-title position-relative pb-3 mb-5">
+                    <div class=" position-relative pb-3 mb-5">
                         <h5 class="fw-bold text-primary text-uppercase">{{ $page->name }}</h5>
                         <h1 class="mb-0">{{ $page->subtitle }}</h1>
                     </div>
@@ -37,8 +37,8 @@
             </div>
 
             @if ($page->parent === 0)
-                <div class="mt-5 section-title text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px; ">
-                    <h2 class="mb-0">{{ _('Paginas Relacionadas a este sitio: ') }}</h2>
+                <div class="mt-5 text-center position-relative pb-3 mb-5 mx-auto" style="max-width: 600px; ">
+                    <h2 class="mb-0">{{ _('Explorar mas: ') }}</h2>
                 </div>
                 @if (count($parentPages) !== 0)
                     <div class="gallery-marks">

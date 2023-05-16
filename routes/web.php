@@ -2,27 +2,31 @@
 
 // Models
 use App\Models\Blog;
-use App\Models\Menu;
 use App\Models\City;
-use App\Models\BaseWeb;
+use App\Models\Menu;
+use App\Models\User;
 
 // Controllers
-use App\Http\Controllers\AdvantagesController;
-use App\Http\Controllers\AuditController;
-use App\Http\Controllers\RolController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BlogsController;
-use App\Http\Controllers\MenusController;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\LogoutController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\CitiesController;
-use App\Http\Controllers\FrontController;
-use App\Http\Controllers\GalleriesController;
-use App\Http\Controllers\WhatsAppController;
-// Supports
+use App\Models\BaseWeb;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\HomeController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\BlogsController;
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\MenusController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\CitiesController;
+use App\Http\Controllers\LogoutController;
+// Supports
+use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\GalleriesController;
+
+// Socialite
+use App\Http\Controllers\AdvantagesController;
+use App\Http\Controllers\CategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +78,39 @@ Route::get('blogs/{id}', function ($id) {
 // Rutas de autenticacion
 Auth::routes();
 
+/**
+ * Autenticacion de Google
+ */
+
+Route::get('/login-google', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/google-callback', function () {
+    $user = Socialite::driver('google')->user();
+    $userExists = User::where('external_id', $user->id)->where('external_auth', 'google')->first();
+
+    if (!$userExists) {
+        $userNew = User::create([
+            'name' => $user->name,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'image' => $user->avatar,
+            'external_id' => $user->id,
+            'external_auth' => 'google',
+        ]);
+
+        $userNew->assignRole(5);
+        Auth::login($userNew);
+        return redirect('/home');
+    }
+
+    Auth::login($userExists);
+
+    return redirect('/home');
+});
+
+
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
@@ -103,17 +140,18 @@ Route::group(['middleware' => ['auth']], function () {
             'title' => 'Informe de reportes SAP'
         ]);
     });
+
+    /**
+     * Rutas de Informes PRIVADOS (SI es necesario loggearse)
+     */
+
+    Route::get('reportesSapMeltec/reports/ventas' . date('Y'), function () {
+        return view('reports.ventas', [
+            'title' => 'Reporte de Ventas Año ' . date('Y')
+        ]);
+    });
 });
 
-/**
- * Rutas de Informes (No es necesario loggearse)
- */
-
-Route::get('reportesSapMeltec/reports/ventas'.date('Y'), function () {
-    return view('reports.ventas', [
-        'title' => 'Reporte de Ventas Año ' . date('Y')
-    ]);
-});
 
 
 /**

@@ -32,6 +32,9 @@ class User extends Authenticatable implements AuditableContract
         'password',
         'image',
         'api_token',
+        'avatar',
+        'external_id',
+        'external_auth',
     ];
 
     /**

@@ -22,10 +22,6 @@
 
                 <iframe width="100%" height="450" src="https://app.flokzu.com/public/039e4LGESR?embedded=true"
                     frameborder="0"></iframe>
-                {{-- @include('includes.contactform')
-                <div class="loader" id="loader">
-                    @include('includes.dashboard.loader')
-                </div> --}}
             </div>
             <div class="col-lg-6 wow slideInUp" data-wow-delay="0.6s">
                 <iframe

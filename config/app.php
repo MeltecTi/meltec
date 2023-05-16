@@ -208,6 +208,9 @@ return [
         //Laravel Collective
         \Collective\Html\HtmlServiceProvider::class,
 
+        //JWT
+        \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
     ],
 
     /*
@@ -222,9 +225,11 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class, // Deshabilitar en Produccion
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ])->toArray(),
 
 ];

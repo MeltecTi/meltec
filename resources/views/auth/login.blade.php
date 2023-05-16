@@ -68,35 +68,24 @@
                                 <label for="email">{{ _('Contraseña') }}</label>
                             </div>
 
-                            <div class="mt-3">
+                            <div class="mt-3 d-grid gap-2">
                                 <button type="submit"
                                     class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">{{ _('Ingresar') }}</button>
                             </div>
 
-                            <div class="text-center mt-4 fw-light">
-                                <a href="{{ url('/') }}" class="text-primary">{{ _('Volver a la Pagina Principal') }}</a>
+                            {!! Form::close() !!}
+                            <div class="mt-3 d-grid gap-2">
+                                <a href="{{ url('/login-google') }}" class="btn btn-block btn-google auth-form-btn">
+                                    <i class="ti-google me-2"></i>{{ _('Ingresar con Google') }}
+                                </a>
                             </div>
 
-                            {!! Form::close() !!}
+                            <div class="text-center mt-4 fw-light">
+                                <a href="{{ url('/') }}"
+                                    class="text-primary">{{ _('Volver a la Pagina Principal') }}</a>
+                            </div>
 
-                            {{-- <form class="pt-3">
-                                
-                                <div class="my-2 d-flex justify-content-between align-items-center">
-                                    <div class="form-check">
-                                        <label class="form-check-label text-muted">
-                                            <input type="checkbox" class="form-check-input">
-                                            Keep me signed in
-                                        </label>
-                                    </div>
-                                    <a href="#" class="auth-link text-black">Forgot password?</a>
-                                </div>
-                                <div class="mb-2">
-                                    <button type="button" class="btn btn-block btn-facebook auth-form-btn">
-                                        <i class="ti-facebook me-2"></i>Connect using facebook
-                                    </button>
-                                </div>
-                                
-                            </form> --}}
+
                         </div>
                     </div>
                 </div>
@@ -110,65 +99,3 @@
 </body>
 
 </html>
-
-
-{{-- @extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
