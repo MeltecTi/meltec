@@ -250,6 +250,7 @@ app.post("/webhook-wspbussiness", (req, res) => {
     console.log(JSON.stringify(req.body, null, 2));
 
     if (req.body.object) {
+        
         if (
             req.body.entry &&
             req.body.entry[0].changes &&
@@ -278,32 +279,27 @@ app.post("/webhook-wspbussiness", (req, res) => {
                 },
             });
         }
-        res.sendStatus(200);
+        res.sendStatus(200) ;
     } else {
         res.sendStatus(404);
     }
 });
 
-function webhookGet() {
+app.get('/webhook-wspbussiness', (req, res) => {
     const verifyToken = process.env.VERIFY_TOKEN;
-    let challenge = "";
 
-    let mode = req.query["hub.mode"];
-    let token = req.query["hub.verify_token"];
-    challenge = req.query["hub.challenge"];
+    let mode = req.query['hub.mode'];
+    let token = req.query['hub.verify_token'];
+    let challenge = req.query['hub.challenge'];
 
-    if (mode && token) {
-        if (mode === "subscribe" && token === verifyToken) {
-            console.log("Wbhook verificado");
-            return challenge;
+    if(mode && token) {
+        if(mode === 'subscribe' && token === verifyToken){
+            console.log('Wbhook verificado');
+            res.status(200).send(challenge);
         } else {
-            return res.sendStatus(403);
+            res.sendStatus(403);
         }
     }
-}
-
-app.get("/webhook-wspbussiness", (req, res) => {
-    res.send(JSON.stringify(webhookGet))
 });
 
 const port = process.env.PORT || 3000;
