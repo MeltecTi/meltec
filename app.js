@@ -9,6 +9,12 @@ const credentials = {
 };
 
 /**
+ * Credenciales de Whatsapp Api
+ */
+
+const tokenApiWhatsapp = process.env.WHATSAPP_TOKEN_API;
+
+/**
  * Obtener las ventas en general
  */
 
@@ -83,7 +89,7 @@ function ventasDiaAnterior() {
     let datenow = obtenerDiaAnterior();
     datenow.setHours(0, 0, 0, 0);
     let formmatedDateNow = datenow.toISOString().slice(0, 19);
-    
+
     const options = {
         method: "GET",
         url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formmatedDateNow}'&$format=json`,
@@ -148,26 +154,32 @@ function ventasSemanales() {
 ventasSemanales();
 setInterval(ventasSemanales, 5000);
 
-
 /**
  * Ventas Semana anterior a la semana pasada
  */
-let ventasSemanaAnteriorAnteriorValue = '';
+let ventasSemanaAnteriorAnteriorValue = "";
 function ventasSemanaAnteriorAnterior() {
-
     // Funcion para obtener la semana anterior a la semana pasada
     function SemanaAnterior() {
         const hoy = new Date();
-        const dateSemanaPasada = new Date(hoy.getTime() - 7 * 24 * 60 * 60 *1000);
-        const semanaPasada = new Date(dateSemanaPasada.getTime() - 7 *24 * 60 * 60 * 1000);
+        const dateSemanaPasada = new Date(
+            hoy.getTime() - 7 * 24 * 60 * 60 * 1000
+        );
+        const semanaPasada = new Date(
+            dateSemanaPasada.getTime() - 7 * 24 * 60 * 60 * 1000
+        );
         return semanaPasada;
     }
 
     // Ultimo dia de la semana anterior a la semana pasada
     function lastDay() {
         const hoy = new Date();
-        const dateSemanaPasada = new Date(hoy.getTime() - 7 * 24 * 60 * 60 *1000);
-        const semanaPasada = new Date(dateSemanaPasada.getTime() - 7 *24 * 60 * 60 * 1000);
+        const dateSemanaPasada = new Date(
+            hoy.getTime() - 7 * 24 * 60 * 60 * 1000
+        );
+        const semanaPasada = new Date(
+            dateSemanaPasada.getTime() - 7 * 24 * 60 * 60 * 1000
+        );
 
         semanaPasada.setDate(semanaPasada.getDate() + 4);
 
@@ -181,15 +193,15 @@ function ventasSemanaAnteriorAnterior() {
     last.setHours(0, 0, 0, 0);
 
     const dates = {
-        first : firstDay.toISOString().slice(0, 19),
-        lasted: last.toISOString().slice(0, 19)
-    }
-    
+        first: firstDay.toISOString().slice(0, 19),
+        lasted: last.toISOString().slice(0, 19),
+    };
+
     const options = {
-        method: 'GET',
+        method: "GET",
         url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${dates.first}' and CDOC_INV_DATE le datetime'${dates.lasted}'`,
         auth: credentials,
-    }
+    };
 
     axios(options)
         .then((response) => {
@@ -200,7 +212,7 @@ function ventasSemanaAnteriorAnterior() {
         });
 }
 
-ventasSemanaAnteriorAnterior()
+ventasSemanaAnteriorAnterior();
 setInterval(ventasSemanaAnteriorAnterior, 5000);
 
 /**
@@ -225,7 +237,69 @@ app.get("/ventasSemanales", (req, res) => {
 
 app.get("/ventasSemanaAnteriorAnterior", (req, res) => {
     res.send(JSON.stringify(ventasSemanaAnteriorAnteriorValue.results));
-}) 
+});
+
+/**
+ * Webhook para facebook
+ */
+
+app.post("/webhook-wspbussiness", (req, res) => {
+    let body = req.body;
+
+    // Verificar el mensaje entrante del webhook
+    console.log(JSON.stringify(req.body, null, 2));
+
+    if (req.body.object) {
+        if (
+            req.body.entry &&
+            req.body.entry[0].changes &&
+            req.body.entry[0].changes[0] &&
+            req.body.entry[0].changes[0].value.messages &&
+            req.body.entry[0].changes[0].value.messages[0]
+        ) {
+            let phoneNumberId =
+                req.body.entry[0].changes[0].value.metadata.phone_number_id;
+            let from = req.body.entry[0].changes[0].value.messages[0].from;
+            let messageBody =
+                req.body.entry[0].changes[0].value.messages[0].text.body;
+
+            axios({
+                method: "POST",
+                url: `https://graph.facebook.com/v12.0/${phoneNumberId}/messages?access_token=${tokenApiWhatsapp}`,
+                data: {
+                    messaging_product: "whatsapp",
+                    to: from,
+                    text: {
+                        body: `ACK ${messageBody}`,
+                    },
+                },
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+        res.sendStatus(200) ;
+    } else {
+        res.sendStatus(404);
+    }
+});
+
+app.get('/webhook-wspbussiness', (req, res) => {
+    const verifyToken = process.env.VERIFY_TOKEN;
+
+    let mode = req.query['hub.mode'];
+    let token = req.query['hub.verify_token'];
+    let challenge = req.query['hub.challenge'];
+
+    if(mode && token) {
+        if(mode === 'subscribe' && token === verifyToken){
+            console.log('Wbhook verificado');
+            res.status(200).send(challenge);
+        } else {
+            res.sendStatus(403);
+        }
+    }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
