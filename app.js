@@ -250,6 +250,7 @@ app.post("/webhook-wspbussiness", (req, res) => {
     console.log(JSON.stringify(req.body, null, 2));
 
     if (req.body.object) {
+        
         if (
             req.body.entry &&
             req.body.entry[0].changes &&
