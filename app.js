@@ -8,11 +8,6 @@ const credentials = {
     password: process.env.SAP_PASSWORD,
 };
 
-/**
- * Credenciales de Whatsapp Api
- */
-
-const tokenApiWhatsapp = process.env.WHATSAPP_TOKEN_API;
 
 /**
  * Obtener las ventas en general
@@ -239,67 +234,6 @@ app.get("/ventasSemanaAnteriorAnterior", (req, res) => {
     res.send(JSON.stringify(ventasSemanaAnteriorAnteriorValue.results));
 });
 
-/**
- * Webhook para facebook
- */
-
-app.post("/webhook-wspbussiness", (req, res) => {
-    let body = req.body;
-
-    // Verificar el mensaje entrante del webhook
-    console.log(JSON.stringify(req.body, null, 2));
-
-    if (req.body.object) {
-        if (
-            req.body.entry &&
-            req.body.entry[0].changes &&
-            req.body.entry[0].changes[0] &&
-            req.body.entry[0].changes[0].value.messages &&
-            req.body.entry[0].changes[0].value.messages[0]
-        ) {
-            let phoneNumberId =
-                req.body.entry[0].changes[0].value.metadata.phone_number_id;
-            let from = req.body.entry[0].changes[0].value.messages[0].from;
-            let messageBody =
-                req.body.entry[0].changes[0].value.messages[0].text.body;
-
-            axios({
-                method: "POST",
-                url: `https://graph.facebook.com/v12.0/${phoneNumberId}/messages?access_token=${tokenApiWhatsapp}`,
-                data: {
-                    messaging_product: "whatsapp",
-                    to: from,
-                    text: {
-                        body: `ACK ${messageBody}`,
-                    },
-                },
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-        }
-        res.sendStatus(200) ;
-    } else {
-        res.sendStatus(404);
-    }
-});
-
-app.get('/webhook-wspbussiness', (req, res) => {
-    const verifyToken = process.env.VERIFY_TOKEN;
-
-    let mode = req.query['hub.mode'];
-    let token = req.query['hub.verify_token'];
-    let challenge = req.query['hub.challenge'];
-
-    if(mode && token) {
-        if(mode === 'subscribe' && token === verifyToken){
-            console.log('Wbhook verificado');
-            res.status(200).send(challenge);
-        } else {
-            res.sendStatus(403);
-        }
-    }
-});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

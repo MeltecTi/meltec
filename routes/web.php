@@ -26,6 +26,7 @@ use App\Http\Controllers\GalleriesController;
 
 // Socialite
 use App\Http\Controllers\AdvantagesController;
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\CategoriesController;
 
 /*
@@ -49,6 +50,10 @@ const PAGE_CONTACT = 'Contáctanos';
 /**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
  */
+
+Route::get('/whatsapp-send-message', [WhatsAppController::class, 'sendMessages']);
+Route::get('/webhook-whatsapp', [WhatsAppController::class, 'webhookWhatsapp']);
+Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
 
 
 Route::get('/', function () {
@@ -130,6 +135,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/gallery', GalleriesController::class);
     Route::resource('home/ventajas', AdvantagesController::class);
     Route::resource('home/ciudades', CitiesController::class);
+    Route::resource('home/budgets', BudgetsController::class);
 
     /**
      * Rutas de Reportes de SAP

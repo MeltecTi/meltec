@@ -7,10 +7,10 @@
         </div>
         <div>
             <a class="navbar-brand brand-logo" href="{{ url('/home') }}">
-                <img src="{{ asset('img/logos/Meltec.png') }}" alt="logo" />
+                <img src="{{ asset('img/logos/Meltec2.gif') }}" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="{{ url('/home') }}">
-                <img src="{{ asset('img/logos/Meltec.png') }}" alt="logo" />
+                <img src="{{ asset('img/logos/Meltec2.gif') }}" alt="logo" />
             </a>
         </div>
     </div>

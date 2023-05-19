@@ -10,6 +10,7 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\BaseWebController;
 use App\Http\Controllers\GalleriesController;
 use App\Http\Controllers\AdvantagesController;
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\WhatsAppController;
 // Illuminate helpers and request
@@ -71,6 +72,9 @@ Route::middleware('auth:api')->get('/user', function( Request $request ) {
         'admin' => $isAdmin,
     ]);
 });
+
+Route::get('/budgets', [BudgetsController::class, 'getData'])->middleware('auth:api');
+Route::put('/budgets/edit/{id}', [BudgetsController::class, 'update'])->middleware('auth:api');
 
 /**
  * Rutas de Sap
