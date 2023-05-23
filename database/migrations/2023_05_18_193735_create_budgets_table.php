@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->string('businessUnit')->unique();
+            $table->string('businessUnit');
             $table->string('goal');
             $table->string('goalPercent');
             $table->string('goalDirector');

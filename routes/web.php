@@ -136,6 +136,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/ventajas', AdvantagesController::class);
     Route::resource('home/ciudades', CitiesController::class);
     Route::resource('home/budgets', BudgetsController::class);
+    Route::get('/exports', [BudgetsController::class, 'export'])->name('budgets.export');
+    Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
 
     /**
      * Rutas de Reportes de SAP

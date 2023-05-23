@@ -1,5 +1,7 @@
 "use strict";
 
+import axios from "axios";
+
 document.addEventListener("DOMContentLoaded", () => {
     const apiToken = document
         .querySelector('meta[name="api-token"]')
@@ -10,6 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .getAttribute("content");
 
     const data = document.querySelector("#data");
+
+    const alertContainer = document.querySelector("#alertContainer");
+
+    setTimeout(function () {
+        alertContainer.style.opacity = 0;
+        requestAnimationFrame(function () {
+            alertContainer.style.display = "none";
+        });
+    }, 5000);
 
     let budgets = [];
 
@@ -34,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.success) {
                 budgets = result.data;
                 viewData();
-                console.log(budgets);
             }
         } catch (error) {
             clearData();
@@ -60,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
             table.classList.add("table", "table-hover", "table-bordered");
 
             const thead = document.createElement("THEAD");
-            thead.classList.add('text-center');
+            thead.classList.add("text-center");
             thead.innerHTML = `
                 <tr>
                     <th>Unidad de Negocio</th>
@@ -83,9 +93,26 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             const tbody = document.createElement("TBODY");
-            tbody.classList.add('text-center');
+            tbody.classList.add("text-center");
             budgets.forEach((budget) => {
-                const { id, businessUnit, goal, goalPercent, goalDirector,  goalDirectorPercent, goalCommercial, commercialPercent, q1Percent, q2Percent, q3Percent, q4Percent, q1, q2, q3, q4 } = budget;
+                const {
+                    id,
+                    businessUnit,
+                    goal,
+                    goalPercent,
+                    goalDirector,
+                    goalDirectorPercent,
+                    goalCommercial,
+                    commercialPercent,
+                    q1Percent,
+                    q2Percent,
+                    q3Percent,
+                    q4Percent,
+                    q1,
+                    q2,
+                    q3,
+                    q4,
+                } = budget;
 
                 const tr = document.createElement("TR");
 
@@ -95,64 +122,84 @@ document.addEventListener("DOMContentLoaded", () => {
                 const tdGoal = document.createElement("TD");
                 tdGoal.textContent = parseValue(goal);
 
-                const tdGoalPercent = document.createElement('TD');
+                const tdGoalPercent = document.createElement("TD");
                 tdGoalPercent.textContent = `${goalPercent} %`;
 
-                const tdGoalDirector = document.createElement('TD');
+                const tdGoalDirector = document.createElement("TD");
                 tdGoalDirector.textContent = parseValue(goalDirector);
 
-                const tdGoalDirectorPercent = document.createElement('TD');
+                const tdGoalDirectorPercent = document.createElement("TD");
                 tdGoalDirectorPercent.textContent = `${goalDirectorPercent} %`;
 
-                const tdGoalCommercial = document.createElement('TD');
+                const tdGoalCommercial = document.createElement("TD");
                 tdGoalCommercial.textContent = parseValue(goalCommercial);
 
-                const tdGoalCommercialPercent = document.createElement('TD');
+                const tdGoalCommercialPercent = document.createElement("TD");
                 tdGoalCommercialPercent.textContent = `${commercialPercent} %`;
 
-                const tdq1 = document.createElement('TD');
+                const tdq1 = document.createElement("TD");
                 tdq1.textContent = `${q1Percent} %`;
 
-                const tdq2 = document.createElement('TD');
+                const tdq2 = document.createElement("TD");
                 tdq2.textContent = `${q2Percent} %`;
 
-                const tdq3 = document.createElement('TD');
+                const tdq3 = document.createElement("TD");
                 tdq3.textContent = `${q3Percent} %`;
 
-                const tdq4 = document.createElement('TD');
+                const tdq4 = document.createElement("TD");
                 tdq4.textContent = `${q4Percent} %`;
 
-                const tdq1Value = document.createElement('TD');
+                const tdq1Value = document.createElement("TD");
                 tdq1Value.textContent = parseValue(q1);
-                
-                const tdq2Value = document.createElement('TD');
+
+                const tdq2Value = document.createElement("TD");
                 tdq2Value.textContent = parseValue(q2);
-                
-                const tdq3Value = document.createElement('TD');
+
+                const tdq3Value = document.createElement("TD");
                 tdq3Value.textContent = parseValue(q3);
-                
-                const tdq4Value = document.createElement('TD');
+
+                const tdq4Value = document.createElement("TD");
                 tdq4Value.textContent = parseValue(q4);
 
-                const tdOpciones = document.createElement('TD');
+                const tdOpciones = document.createElement("TD");
 
-                const divOpciones = document.createElement('DIV');
-                divOpciones.classList.add('d-grid', 'gap-2', 'd-md-block');
+                const divOpciones = document.createElement("DIV");
+                divOpciones.classList.add("d-grid", "gap-2", "d-md-block");
 
-                const editButton = document.createElement('A');
-                editButton.classList.add('btn', 'btn-outline-info');
+                const editButton = document.createElement("A");
+                editButton.classList.add("btn", "btn-outline-info");
                 editButton.innerHTML = `<i class="mdi mdi-lead-pencil"></i>`;
-                editButton.setAttribute('href', `/home/budgets/${id}/edit`);
+                editButton.setAttribute("href", `/home/budgets/${id}/edit`);
 
-                const deleteButton = document.createElement('BUTTON');
-                deleteButton.classList.add('btn', 'btn-outline-danger');
+                const deleteButton = document.createElement("BUTTON");
+                deleteButton.classList.add("btn", "btn-outline-danger");
+                deleteButton.value = `${id}`;
                 deleteButton.innerHTML = `<i class="mdi mdi-delete-forever"></i>`;
+                deleteButton.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    const id = e.target.value;
+
+                    if (id !== undefined) {
+                        Swal.fire({
+                            title: `¿Esta seguro de Borrar este presupuesto : ${businessUnit} ?`,
+                            text: "La accion solicitada no se podra revertir!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Borrar!",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                delelteBudget(id);
+                            }
+                        });
+                    }
+                });
 
                 divOpciones.appendChild(editButton);
                 divOpciones.appendChild(deleteButton);
 
                 tdOpciones.appendChild(divOpciones);
-
 
                 tr.appendChild(tdBussinessUnit);
                 tr.appendChild(tdGoal);
@@ -177,6 +224,45 @@ document.addEventListener("DOMContentLoaded", () => {
             table.appendChild(tbody);
             data.appendChild(table);
         }
+    }
+
+    // Borrar el presupuesto
+    async function delelteBudget(id) {
+        try {
+            Swal.fire({
+                title: "Borrando datos, por favor espere!",
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+
+            const url = `/api/budget/${id}`;
+
+            axios
+                .delete(url, {
+                    headers: {
+                        "X-CSRF-TOKEN": _token,
+                        Authorization: `Bearer ${apiToken}`,
+                    },
+                })
+                .then((response) => {
+                    Swal.fire({
+                        title: "Exito",
+                        text: response.data.message,
+                        icon: "success",
+                    });
+
+                    getDataModel();
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: `Error al realizar la peticion, Codigo de error: ${error.response.status} - ${error.response.statusText}`,
+                    });
+                    console.error(error.response);
+                });
+        } catch (error) {}
     }
 
     function parseValue(value) {

@@ -154,7 +154,7 @@ class RolController extends Controller
                 'success' => true,
                 'message' => 'Rol Eliminado correctamente',
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             return response()->json([
                 'success' => false,

@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BudgetsTemplateExport;
 use Exception;
+use App\Exports\ExportBudgets;
 use App\Models\Budget;
 use Illuminate\Http\Request;
 use App\Imports\ImportBudgets;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class BudgetsController extends Controller
 {
@@ -31,15 +35,31 @@ class BudgetsController extends Controller
     }
 
     /**
+     * Export to the Excel Table
+     */
+    public function export()
+    {
+
+        return Excel::download(new ExportBudgets, 'Presupuesto Meltec ' . date('Y') . '.xlsx');
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         if ($request->hasFile('excel')) {
-            Excel::import(new ImportBudgets, $request->file('excel'));
+            $file = $request->file('excel');
 
-            return back();
+            if($file->isValid()){
+                Excel::import(new ImportBudgets, $file);
+                return redirect()->back()->with('success', 'Archivo Importado Correctamente Correctamente');
+
+            }
+
         }
+
+        return redirect()->back()->with('error', 'No se ha seleccionado un archivo valido o el campo esta vacio!');
     }
 
     /**
@@ -68,19 +88,19 @@ class BudgetsController extends Controller
             $user = Auth::user();
             $token = str_replace('Bearer ', '', $request->header('Authorization'));
 
-            if($user->api_token !== $token || !$user->isAdmin()){
+            if ($user->api_token !== $token || !$user->isAdmin()) {
                 throw new UnauthorizedException('Accion no permitida, no tiene los permisos necesarios para realizar esta accion', 401);
             }
 
             $budget = Budget::find($id);
 
-            if(!$budget) {
+            if (!$budget) {
                 throw new Exception('La unidad de venta no existe', 404);
             }
 
             $update = $budget->update($request->all());
 
-            if(!$update) {
+            if (!$update) {
                 throw new Exception('Error al Actualizar los datos', 500);
             }
 
@@ -88,7 +108,6 @@ class BudgetsController extends Controller
                 'success' => true,
                 'message' => 'Datos Actualizados correctamente',
             ]);
-
         } catch (UnauthorizedException $e) {
             return response()->json([
                 'success' => false,
@@ -107,9 +126,41 @@ class BudgetsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        //
+        try {
+            $user = Auth::user();
+            $token = str_replace('Bearer ', '', $request->header('Authorization'));
+
+            if ($user->api_token !== $token || !$user->isAdmin()) {
+                throw new UnauthorizedException('Accion no permitida, no tiene los permisos necesarios para realizar esta accion', 401);
+            }
+
+            $budget = Budget::find($id);
+
+            $delete = $budget->delete();
+
+            if (!$delete) {
+                throw new Exception('Hubo un error al procesar la Solicitud', 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Presupuesto eliminado',
+            ], 200);
+        } catch (UnauthorizedException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ], $e->getCode());
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+            ], $e->getCode());
+        }
     }
 
     /**
@@ -148,5 +199,10 @@ class BudgetsController extends Controller
                 'code' => $e->getCode(),
             ], $e->getCode());
         }
+    }
+
+    public function template()
+    {
+        return Excel::download(new BudgetsTemplateExport, 'Plantilla_Subida_Presupuesto_' . date('Y') . '.xlsx');
     }
 }

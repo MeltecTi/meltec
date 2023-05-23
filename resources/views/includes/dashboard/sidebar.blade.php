@@ -50,6 +50,12 @@
                     <span class="menu-title">{{ 'Historial de Cambios' }}</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('budgets.index') }}" class="nav-link">
+                <i class="menu-icon mdi mdi-cash-multiple"></i>
+                <span class="menu-title">{{ _('Presupuesto Meltec') }}</span>
+                </a>
+            </li>
 
             {{-- Fin Elementos Administrativos --}}
         @endif

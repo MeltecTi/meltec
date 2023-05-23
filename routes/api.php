@@ -75,6 +75,7 @@ Route::middleware('auth:api')->get('/user', function( Request $request ) {
 
 Route::get('/budgets', [BudgetsController::class, 'getData'])->middleware('auth:api');
 Route::put('/budgets/edit/{id}', [BudgetsController::class, 'update'])->middleware('auth:api');
+Route::delete('/budget/{id}', [BudgetsController::class, 'destroy'])->middleware('auth:api');
 
 /**
  * Rutas de Sap
