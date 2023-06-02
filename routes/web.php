@@ -27,7 +27,12 @@ use App\Http\Controllers\GalleriesController;
 // Socialite
 use App\Http\Controllers\AdvantagesController;
 use App\Http\Controllers\BudgetsController;
+use App\Http\Controllers\CalendarEventsController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\GoogleApiController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\SuccessCasesController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +51,7 @@ use App\Http\Controllers\CategoriesController;
 
 const FORMATED_REPLACE = ['<p>', '</p>', '<a>', '</a>'];
 const PAGE_CONTACT = 'Contáctanos';
+const MOTOROLA = 1;
 
 /**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
@@ -91,29 +97,7 @@ Route::get('/login-google', function () {
     return Socialite::driver('google')->redirect();
 });
 
-Route::get('/google-callback', function () {
-    $user = Socialite::driver('google')->user();
-    $userExists = User::where('external_id', $user->id)->where('external_auth', 'google')->first();
-
-    if (!$userExists) {
-        $userNew = User::create([
-            'name' => $user->name,
-            'email' => $user->email,
-            'avatar' => $user->avatar,
-            'image' => $user->avatar,
-            'external_id' => $user->id,
-            'external_auth' => 'google',
-        ]);
-
-        $userNew->assignRole(5);
-        Auth::login($userNew);
-        return redirect('/home');
-    }
-
-    Auth::login($userExists);
-
-    return redirect('/home');
-});
+Route::get('/google-callback', [GoogleApiController::class, 'loginGoogle']);
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -138,6 +122,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/budgets', BudgetsController::class);
     Route::get('/exports', [BudgetsController::class, 'export'])->name('budgets.export');
     Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
+    Route::resource('home/calendarEvents', CalendarEventsController::class);
+    Route::resource('/home/products', ProductsController::class);
+    Route::resource('/home/casosdeexito', SuccessCasesController::class);
 
     /**
      * Rutas de Reportes de SAP
@@ -180,9 +167,10 @@ Route::get('/{slug?}', function ($slug) {
     $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
     $parentPages = $menu->getElementsParentMenu($page->id);
 
-    if ($page === null) {
+    if ($page === null || !$page) {
         abort(404);
     }
+
 
     if ($page->name === PAGE_CONTACT) {
         $cities = City::all();
@@ -196,7 +184,14 @@ Route::get('/{slug?}', function ($slug) {
         return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
     }
 
+    switch ($page->template_id) {
+        case 1:
+            $products = $page->mark->products;
+            return view($page->template->routeTemplate, compact('page', 'products', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+            break;
 
-
-    return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+        default:
+            return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+            break;
+    }
 });

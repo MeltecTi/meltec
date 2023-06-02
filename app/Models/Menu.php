@@ -13,7 +13,7 @@ class Menu extends Model implements Auditable
     use HasFactory;
     use  \OwenIt\Auditing\Auditable;
 
-    protected $fillable = ['name', 'slug', 'parent', 'order', 'enabled', 'image', 'content',  'subtitle'];
+    protected $fillable = ['name', 'slug', 'parent', 'order', 'enabled', 'image', 'content',  'subtitle', 'template_id', 'logo', 'mark_id'];
 
     public function parentMenu(): BelongsTo
     {
@@ -45,5 +45,15 @@ class Menu extends Model implements Auditable
     public function advantages(): BelongsToMany
     {
         return $this->belongsToMany(Advantage::class);
+    }
+
+    public function template()
+    {
+        return $this->hasOne(Template::class, 'id', 'template_id');
+    }
+
+    public function mark()
+    {
+        return $this->belongsTo(Mark::class);
     }
 }

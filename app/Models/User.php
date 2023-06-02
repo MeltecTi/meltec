@@ -35,6 +35,8 @@ class User extends Authenticatable implements AuditableContract
         'avatar',
         'external_id',
         'external_auth',
+        'google_access_token',
+        'google_refresh_token',
     ];
 
     /**

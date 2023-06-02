@@ -1,4 +1,9 @@
 @extends('layouts.app')
+@section('logosheader')
+    <a href="{{ url('/') }}" class="navbar-brand p-0">
+        <img src="{{ asset('img/logos/Meltec.png') }}" alt="Logo Meltec" class="img-fluid w-50">
+    </a>
+@endsection
 @section('title', $page->name)
 
 @section('content-header')
@@ -29,8 +34,7 @@
                         @endif
                         @foreach ($dataExtra->galleries as $gallery)
                             <img class="position-absolute w-100 h-100 rounded wow zoomIn" data-wow-delay="0.9s"
-                                src="{{ asset('storage/gallery/' . $gallery->file) }}"
-                                style="object-fit: cover;">
+                                src="{{ asset('storage/gallery/' . $gallery->file) }}" style="object-fit: cover;">
                         @endforeach
                     </div>
                 </div>
@@ -67,4 +71,3 @@
 
 
 @endsection
-

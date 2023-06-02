@@ -34,7 +34,14 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_ID'),
         'client_secret' => env('GOOGLE_KEY_PRIV_OAUTH'),
+        'client_secret2' => storage_path('credentials/client_secret_634116498920-rpefsa8ifslc6ckf8fc2u3ss39q8348n.apps.googleusercontent.com.json'),
         'redirect' => '/google-callback',
+        'scopes' => [
+            'offline_access',
+            'openid',
+            'profile',
+            'email',
+        ]
     ],
 
 ];

@@ -23,8 +23,8 @@
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link"
                                 href="{{ route('usuarios.index') }}">{{ _('Todos los Usuarios') }}</a></li>
-                        <li class="nav-item"> <a class="nav-link"
-                                href="{{ route('usuarios.create') }}">{{ _('Añadir Usuario') }}</a></li>
+                        {{-- <li class="nav-item"> <a class="nav-link"
+                                href="{{ route('usuarios.create') }}">{{ _('Añadir Usuario') }}</a></li> --}}
                     </ul>
                 </div>
             </li>
@@ -52,8 +52,8 @@
             </li>
             <li class="nav-item">
                 <a href="{{ route('budgets.index') }}" class="nav-link">
-                <i class="menu-icon mdi mdi-cash-multiple"></i>
-                <span class="menu-title">{{ _('Presupuesto Meltec') }}</span>
+                    <i class="menu-icon mdi mdi-cash-multiple"></i>
+                    <span class="menu-title">{{ _('Presupuesto Meltec') }}</span>
                 </a>
             </li>
 
@@ -102,24 +102,43 @@
         @if (auth()->user()->can('ver-pagina'))
             {{-- Paginas --}}
             <li class="nav-item">
-                <a href="#ui-menus" class="nav-link" data-bs-toggle="collapse" aria-expanded="false"
+                <a href="#ui-pages" class="nav-link" data-bs-toggle="collapse" aria-expanded="false"
                     aria-controls="form-elements">
                     <i class="menu-icon mdi mdi-menu"></i>
                     <span class="menu-title">{{ _('Paginas') }}</span>
                     <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="ui-menus">
+                <div class="collapse" id="ui-pages">
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"><a href="{{ route('menus.index') }}"
                                 class="nav-link">{{ _('Administrador de Paginas') }}</a></li>
                         <li class="nav-item"><a href="{{ route('menus.create') }}"
                                 class="nav-link">{{ _('Nueva Pagina') }}</a></li>
+                        <li class="nav-item"><a href="{{ route('casosdeexito.index') }}"
+                                class="nav-link">{{ _('Casos de Exito') }}</a></li>
                         <li class="nav-item"><a href="{{ route('ventajas.index') }}" class="nav-link">
                                 {{ _('Ventajas') }} </a></li>
                     </ul>
                 </div>
             </li>
             {{-- Fin Paginas --}}
+
+            {{-- Productos --}}
+            <li class="nav-item">
+                <a href="#ui-products" class="nav-link" data-bs-toggle="collapse" aria-expanded="false"
+                    aria-controls="form-elements">
+                    <i class="menu-icon mdi mdi-cart"></i>
+                    <span class="menu-title">{{ _('Productos') }}</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="ui-products">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a href="{{ route('products.index') }}"
+                                class="nav-link">{{ _('Todos los productos') }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            {{-- Fin Productos --}}
         @endif
 
         <li class="nav-item">
@@ -138,10 +157,10 @@
             </a>
         </li>
     </ul>
-    
+
     <li class="nav-item">
         <a class="nav-link" href="{{ route('logout') }}">
-            <i class="dropdown-item-icon mdi mdi-power"></i> 
+            <i class="dropdown-item-icon mdi mdi-power"></i>
             <span class="menu-title">{{ _('Cerrar Sesion') }}</span>
         </a>
     </li>

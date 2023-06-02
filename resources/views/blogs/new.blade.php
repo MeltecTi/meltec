@@ -88,5 +88,7 @@
             </div>
         </div>
     </div>
+
+    <button id="prueba" class="btn btn-primary">Prueba</button>
 @endsection
 @vite(['resources/js/custom/blogs/create.js'])

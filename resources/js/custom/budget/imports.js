@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (budgets.length === 0) {
             data.innerHTML = `<p>No hay datos para mostrar</p>`;
         } else {
+
             const table = document.createElement("TABLE");
             table.classList.add("table", "table-hover", "table-bordered");
 
@@ -219,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 tr.appendChild(tdOpciones);
                 tbody.appendChild(tr);
             });
+
 
             table.appendChild(thead);
             table.appendChild(tbody);

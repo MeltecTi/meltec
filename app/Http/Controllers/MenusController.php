@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Advantage;
-use App\Models\Gallery;
 use App\Models\Menu;
+use App\Models\Mark;
+use App\Models\Gallery;
+use App\Models\Template;
+use App\Models\Advantage;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
+
+const PARENT_MARKS = 'Soluciones';
 
 class MenusController extends Controller
 {
@@ -25,7 +32,7 @@ class MenusController extends Controller
     {
         $title = 'Administrador de Paginas';
         $menus = Menu::paginate(10);
-        
+
         return view('menus.index', compact('title', 'menus'));
     }
 
@@ -47,7 +54,9 @@ class MenusController extends Controller
         foreach ($submenus as $id => $name) {
             $opciones[$id] = $name;
         }
-        return view('menus.add', compact('title', 'opciones', 'galleries', 'advantage'));
+        $templatesAll = Template::all();
+        $templates = $templatesAll->pluck('templateName', 'id');
+        return view('menus.add', compact('title', 'templates', 'opciones', 'galleries', 'advantage'));
     }
 
     /**
@@ -55,33 +64,109 @@ class MenusController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate([
-            'name' => 'required',
-            'slug' => 'required',
-            'content' => 'required',
-            'image' => 'required|mimes:jpg,jpeg,png,webp|max:5120',
-        ]);
 
-        $menuModel = new Menu();
-        $inputData = $request->all();
-        $parentData = $inputData['parent'];
-        $countOrder = $menuModel->orderMenu($parentData);
-        $inputData['order'] = $countOrder;
+        try {
+            $user = Auth::user();
+            $token = str_replace('Bearer ', '', $request->header('Authorization'));
 
-        if (isset($inputData['image'])) {
-            $fileName = $inputData['image']->hashName();
-            $moveImage = $inputData['image']->move(storage_path('app/public/img/pages/'), $fileName);
 
-            if ($moveImage) {
-                $inputData['image'] = $fileName;
+            if ($user->api_token !== $token || !$user->isAdmin()) {
+                throw new UnauthorizedException('Acceso no autorizado', 403);
             }
-        }
+            $data = $request->except('contentMark', 'markName');
 
-        
-        $menuGeneral = Menu::create($inputData);
-        $menuGeneral->galleries()->sync($request->input('galleries', []));
-        $menuGeneral->advantages()->sync($request->input('advantages', []));
-        return redirect()->route('menus.index');
+            switch ($data['template_id']) {
+                case '1':
+
+                    // Validando si la pagina esta habilitada
+                    $enabledPage = $request->input('enabled');
+                    $enabledPage === 'on' ? $data['enabled'] = 1 : $data['enabled'] = 0;
+
+                    $slug = strtolower($data['name']);
+                    $verifySlug = Menu::where('slug', $slug)->get();
+
+                    if ($verifySlug->count() > 0) {
+                        throw new Exception('La pagina ya existe!!', 400);
+                    }
+                    $data['slug'] = $slug;
+                    $data['subtitle'] = 'Pagina de ' . $data['name'];
+
+                    $mark = Mark::where('name', $data['name'])->get();
+                    $data['mark_id'] = $mark->first()->id;
+
+                    // Validando si hay una Imagen de Logo
+                    isset($data['markLogo']) ? $logo = $data['markLogo'] : $logo = null;
+
+                    if ($logo) {
+                        $filename = $logo->hashName();
+                        $moveImage = $logo->move(storage_path('app/public/img/pages/'), $filename);
+
+                        if ($moveImage) {
+                            $data['logo'] = $filename;
+                            $data['image'] = $filename;
+                        }
+                    }
+
+
+                    $parent = Menu::where('name', PARENT_MARKS)->get();
+                    $data['parent'] = $parent->first()->id;
+
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+
+            $page = Menu::create($data);
+
+            if (!$page) {
+                throw new Exception('Error al crear la pagina, contacte con el administrador', 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pagina creada Correctamente',
+            ], 200);
+        } catch (UnauthorizedException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], $e->getCode());
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+        // request()->validate([
+        //     'name' => 'required',
+        //     'slug' => 'required',
+        //     'content' => 'required',
+        //     'image' => 'required|mimes:jpg,jpeg,png,webp|max:5120',
+        // ]);
+
+        // $menuModel = new Menu();
+        // $inputData = $request->all();
+        // $parentData = $inputData['parent'];
+        // $countOrder = $menuModel->orderMenu($parentData);
+        // $inputData['order'] = $countOrder;
+
+        // if (isset($inputData['image'])) {
+        //     $fileName = $inputData['image']->hashName();
+        //     $moveImage = $inputData['image']->move(storage_path('app/public/img/pages/'), $fileName);
+
+        //     if ($moveImage) {
+        //         $inputData['image'] = $fileName;
+        //     }
+        // }
+
+
+        // $menuGeneral = Menu::create($inputData);
+        // $menuGeneral->galleries()->sync($request->input('galleries', []));
+        // $menuGeneral->advantages()->sync($request->input('advantages', []));
+        // return redirect()->route('menus.index');
     }
 
     /**
@@ -122,7 +207,7 @@ class MenusController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        
+
         request()->validate([
             'name' => 'required',
             'slug' => 'required',

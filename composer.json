@@ -9,6 +9,8 @@
         "ckeditor/ckeditor": "^4.21",
         "delfimov/gdimage": "^1.5",
         "ezyang/htmlpurifier": "^4.16",
+        "google/apiclient": "^2.14",
+        "google/cloud-secret-manager": "^1.11",
         "guzzlehttp/guzzle": "^7.5",
         "intervention/image": "^2.7",
         "laravel/framework": "^10.0",

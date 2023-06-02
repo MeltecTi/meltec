@@ -38,7 +38,7 @@
 
                     <div class="container text-center">
                         <div class="row row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 m-3" id="sectionImages">
-                            
+
                         </div>
                     </div>
                 </div>

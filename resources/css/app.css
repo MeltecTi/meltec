@@ -1,9 +1,10 @@
 /********** Template CSS **********/
 :root {
-    --primary: #06a3da;
-    --secondary: #34ad54;
-    --light: #eef9ff;
-    --dark: #091e3e;
+    --primary: #395181;
+    --secondary: #263145;
+    --light: #FFFFFF;
+    --dark: #3C3C3E;
+    --principal: "Montserrat"
 }
 
 /*** Spinner ***/
@@ -78,7 +79,7 @@ h6,
 
 /*** Button ***/
 .btn {
-    font-family: "Nunito", sans-serif;
+    font-family: var(--principal), sans-serif;
     font-weight: 600;
     transition: 0.5s;
 }
@@ -123,11 +124,11 @@ h6,
 /*** Navbar ***/
 .navbar-dark .navbar-nav .nav-link {
     
-    font-family: "Nunito", sans-serif;
+    font-family: var(--principal), sans-serif;
     position: relative;
     margin-left: 25px;
     padding: 35px 0;
-    color: #ffffff;
+    color: var(--light);
     font-size: 18px;
     font-weight: 600;
     outline: none;
@@ -136,13 +137,13 @@ h6,
 
 @media (max-width: 994px) {
     .navbar-dark {
-        background: #395181;
+        background: var(--secondary);
     }
 }
 
 .sticky-top.navbar-dark .navbar-nav .nav-link {
     padding: 20px 0;
-    color: #ffffff;
+    color: var(--light);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover,
@@ -151,7 +152,7 @@ h6,
 }
 
 .navbar-dark .navbar-brand h1 {
-    color: #ffffff;
+    color: var(--light);
 }
 
 .navbar-dark .navbar-toggler {
@@ -161,7 +162,7 @@ h6,
 
 @media (max-width: 767px) {
     .navbar-dark {
-        background-color: #395181;
+        background-color: var(--secondary);
     }
 
     .navbar-dark a {
@@ -169,14 +170,14 @@ h6,
     }
     .sticky-top.navbar-dark {
         position: relative;
-        background: #395181;
+        background: var(--secondary);
     }
 
     .navbar-dark .navbar-nav .nav-link,
     .navbar-dark .navbar-nav .nav-link.show,
     .sticky-top.navbar-dark .navbar-nav .nav-link {
         padding: 10px 0;
-        color: #ffffff;
+        color: var(--light);
     }
 
     .navbar-dark .navbar-brand h1 {
@@ -201,7 +202,7 @@ h6,
         height: 2px;
         bottom: -1px;
         left: 50%;
-        background: #395181;
+        background: var(--secondary);
         transition: 0.5s;
     }
 
@@ -281,7 +282,7 @@ h6,
     width: 6px;
     height: 5px;
     bottom: 0px;
-    background: #ffffff;
+    background: var(--light);
     -webkit-animation: section-title-run 5s infinite linear;
     animation: section-title-run 5s infinite linear;
 }
@@ -392,7 +393,7 @@ h6,
     margin: 0 5px;
     width: 15px;
     height: 15px;
-    background: #dddddd;
+    background: var(--light);
     border-radius: 2px;
     transition: 0.5s;
 }
@@ -441,7 +442,7 @@ h6,
 }
 
 .team-item:hover {
-    box-shadow: 0 0 30px #dddddd;
+    box-shadow: 0 0 30px var(--light);
 }
 
 .team-item:hover .team-social {
@@ -563,7 +564,7 @@ h6,
 }
 
 .absolute-bg {
-    background-color: #000;
+    background-color: var(--dark);
     position: absolute;
     top: 0;
     left: 0;
@@ -588,9 +589,9 @@ h6,
 
 .content-mark {
     padding: 15px;
-    background-color: #06a3da;
+    background-color: var(--primary);
     border-radius: 0 0 5px 5px;
-    color: #fff;
+    color: var(--light);
 }
 
 .content-mark h5 {
@@ -606,4 +607,3 @@ h6,
         display: block;
     }
 }
-/* Slider */
