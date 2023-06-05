@@ -171,4 +171,4 @@
     </div>
 
 @endsection
-@vite(['resources/js/custom/pages/add.js'])
+@vite(['resources/js/custom/pages/edit.js'])

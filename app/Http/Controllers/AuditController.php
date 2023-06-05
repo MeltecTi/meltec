@@ -33,12 +33,12 @@ class AuditController extends Controller
         };
 
         $data = Audit::find($id);
-        $userdata = $data->user->name;
+        // $userdata = $data->user->name;
 
         return response()->json([
             'message' => 'ok',
             'data' => $data,
-            'userResponse' => $userdata,
+            // 'userResponse' => $userdata,
         ]);
     }
 }

@@ -16,9 +16,9 @@
                                 <th>
                                     {{ _('Evento o Cambio') }}
                                 </th>
-                                <th>
+                                {{-- <th>
                                     {{ _('Usuario Responsable') }}
-                                </th>
+                                </th> --}}
                                 <th>
                                     {{ _('Modelo cambiado') }}
                                 </th>
@@ -38,7 +38,7 @@
                                 <tr>
                                     <td>{{ $audition->id }}</td>
                                     <td>{{ $audition->event }}</td>
-                                    <td>{{ $audition->user->name }}</td>
+                                    {{-- <td>{{ $audition->user->name }}</td> --}}
                                     <td>
                                         @switch ($audition->auditable_type)
                                             @case ('App\Models\User')

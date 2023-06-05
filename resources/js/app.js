@@ -1,4 +1,6 @@
 import "./requires/bootstrap";
+import * as bootstrap from 'bootstrap';
+import $ from 'jquery';
 
 
 window.onload = () => {
@@ -8,5 +10,5 @@ window.onload = () => {
     setTimeout(() => {
         spiner.style.visibility = "hidden";
         container.style.opacity = 1;
-    }, 1500);
+    }, 1000);
 };

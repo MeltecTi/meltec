@@ -49,9 +49,6 @@ use App\Models\Product;
  * Constantes declaradas
  */
 
-const FORMATED_REPLACE = ['<p>', '</p>', '<a>', '</a>'];
-const PAGE_CONTACT = 'Contáctanos';
-const MOTOROLA = 1;
 
 /**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
@@ -63,28 +60,22 @@ Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
 
 
 Route::get('/', function () {
-    $baseWeb = new BaseWeb();
-    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
-    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
-    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
-    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
-    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
-    return view('index', compact('instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+    return redirect('/home');
 });
 
 
-Route::get('blogs/{id}', function ($id) {
-    $baseWeb = new BaseWeb();
-    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
-    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
-    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
-    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
-    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
+// Route::get('blogs/{id}', function ($id) {
+//     $baseWeb = new BaseWeb();
+//     $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+//     $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
+//     $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+//     $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+//     $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
 
-    $blog = Blog::find($id);
-    $title = $blog->title;
-    return view('blogs.blog', compact('blog', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-});
+//     $blog = Blog::find($id);
+//     $title = $blog->title;
+//     return view('blogs.blog', compact('blog', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+// });
 
 // Rutas de autenticacion
 Auth::routes();
@@ -153,45 +144,46 @@ Route::group(['middleware' => ['auth']], function () {
  * Condicional para la visualizacion del sitio web en front
  */
 
-Route::get('/{slug?}', function ($slug) {
-    $menu = new Menu();
-    $baseWeb = new BaseWeb();
-    $page = $menu->getIdByNamePage($slug);
+// Route::get('/{slug?}', function ($slug) {
+//     $menu = new Menu();
+//     $baseWeb = new BaseWeb();
+//     $page = $menu->getIdByNamePage($slug);
+    
+//     if ($page === null || !$page) {
+//         abort(404);
+//     }
+    
+//     $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
+//     $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
+//     $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
+//     $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
+//     $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
 
-    $instagramUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('instagram'));
-    $facebookUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('facebook'));
-    $youtubeUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('youtube'));
-    $linkedinUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('linkedin'));
-    $twitterUrl = str_replace(FORMATED_REPLACE, '', $baseWeb->getContentByName('twitter'));
-
-    $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
-    $parentPages = $menu->getElementsParentMenu($page->id);
-
-    if ($page === null || !$page) {
-        abort(404);
-    }
+//     $dataExtra = Menu::with('galleries', 'advantages')->find($page->id);
+//     $parentPages = $menu->getElementsParentMenu($page->id);
 
 
-    if ($page->name === PAGE_CONTACT) {
-        $cities = City::all();
 
-        return view('contact', compact('page', 'cities', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-    }
+//     if ($page->name === PAGE_CONTACT) {
+//         $cities = City::all();
 
-    if ($page->name === 'Blogs') {
-        $blogsAll = Blog::get()->sortByDesc('created_at');
-        $title = 'Blog y Noticias Meltec';
-        return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-    }
+//         return view('contact', compact('page', 'cities', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+//     }
 
-    switch ($page->template_id) {
-        case 1:
-            $products = $page->mark->products;
-            return view($page->template->routeTemplate, compact('page', 'products', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-            break;
+//     if ($page->name === 'Blogs') {
+//         $blogsAll = Blog::get()->sortByDesc('created_at');
+//         $title = 'Blog y Noticias Meltec';
+//         return view('blogs', compact('blogsAll', 'title', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+//     }
 
-        default:
-            return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
-            break;
-    }
-});
+//     switch ($page->template_id) {
+//         case 1:
+//             $products = $page->mark->products;
+//             return view($page->template->routeTemplate, compact('page', 'products', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+//             break;
+
+//         default:
+//             return view('page', compact('page', 'dataExtra', 'parentPages', 'instagramUrl', 'facebookUrl', 'youtubeUrl', 'linkedinUrl', 'twitterUrl'));
+//             break;
+//     }
+// });

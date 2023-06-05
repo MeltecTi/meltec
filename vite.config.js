@@ -60,6 +60,7 @@ export default defineConfig({
                 "resources/js/ckeditor/build/ckeditor.js",
                 "resources/js/custom/products/add.js",
                 "resources/js/custom/successcase/index.js",
+                "resources/js/custom/pages/edit.js",
             ],
             refresh: true,
         }),
