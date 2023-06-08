@@ -30,20 +30,20 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        Login::class => [
-            GenerateApiToken::class,
-            LogSuccessfulLogin::class,
-        ],
-        Logout::class => [
-            DestroyApiToken::class,
-            LogSuccessfulLogout::class,
-        ],
-        Lockout::class => [
-            DestroyApiTokenOnLockOut::class,
-        ],
-        SessionExpired::class => [
-            DeleteApiToken::class,
-        ],
+        // Login::class => [
+        //     GenerateApiToken::class,
+        //     LogSuccessfulLogin::class,
+        // ],
+        // Logout::class => [
+        //     DestroyApiToken::class,
+        //     LogSuccessfulLogout::class,
+        // ],
+        // Lockout::class => [
+        //     DestroyApiTokenOnLockOut::class,
+        // ],
+        // SessionExpired::class => [
+        //     DeleteApiToken::class,
+        // ],
     ];
 
     /**

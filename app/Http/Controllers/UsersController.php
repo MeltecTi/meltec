@@ -32,7 +32,7 @@ class UsersController extends Controller
         $usuarios = User::paginate(10);
 
         $title = 'Usuarios';
-        
+
         return view('users.index', [
             'usuarios' => $usuarios,
             'title' => $title,
@@ -47,6 +47,12 @@ class UsersController extends Controller
         $title = 'Crear nuevo Usuario';
         $roles = Role::pluck('name', 'name')->all();
         return view('users.new', compact('roles', 'title'));
+    }
+
+    public function employes()
+    {
+        $title = 'Empleados';
+        return view('users.employes', compact('title'));
     }
 
     /**
@@ -79,13 +85,12 @@ class UsersController extends Controller
 
             if ($user) {
                 $user->assignRole($request->input('roles'));
-                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Usuario creado con exito',
                     'code' => 200,
                 ], 200);
-
             } else {
                 throw new Exception('Hubo un error al ingresar el usuario, Pongase en contacto con el administrador del sitio', 500);
             }

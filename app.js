@@ -8,6 +8,7 @@ const credentials = {
     password: process.env.SAP_PASSWORD,
 };
 
+const sapUrl = process.env.SAP_URL;
 
 /**
  * Obtener las ventas en general
@@ -17,7 +18,7 @@ let kpiValue = "";
 function getDataSap() {
     const options = {
         method: "GET",
-        url: process.env.URL_SAPKPI,
+        url: `${sapUrl}sap/byd/odata/analytics/kpi/Kpi.svc/Kpi('Z1B2BB527DDCF9E26004D8265')/Value`,
         auth: credentials,
     };
 
@@ -45,7 +46,7 @@ function getVentasDia() {
 
     const options = {
         method: "GET",
-        url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formattedDateNow}'&$format=json`,
+        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formattedDateNow}'&$format=json`,
         auth: credentials,
     };
 
@@ -87,7 +88,7 @@ function ventasDiaAnterior() {
 
     const options = {
         method: "GET",
-        url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formmatedDateNow}'&$format=json`,
+        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formmatedDateNow}'&$format=json`,
         auth: credentials,
     };
     axios(options)
@@ -133,7 +134,7 @@ function ventasSemanales() {
 
     const options = {
         method: "GET",
-        url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${formattedStartOfWeek}' and CDOC_INV_DATE le datetime'${formattedToday}'`,
+        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${formattedStartOfWeek}' and CDOC_INV_DATE le datetime'${formattedToday}'`,
         auth: credentials,
     };
 
@@ -194,7 +195,7 @@ function ventasSemanaAnteriorAnterior() {
 
     const options = {
         method: "GET",
-        url: `https://my345513.sapbydesign.com/sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${dates.first}' and CDOC_INV_DATE le datetime'${dates.lasted}'`,
+        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,CIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=9999&$format=json&$filter=CDOC_INV_DATE ge datetime'${dates.first}' and CDOC_INV_DATE le datetime'${dates.lasted}'`,
         auth: credentials,
     };
 
@@ -209,6 +210,86 @@ function ventasSemanaAnteriorAnterior() {
 
 ventasSemanaAnteriorAnterior();
 setInterval(ventasSemanaAnteriorAnterior, 5000);
+
+let employesSAP = {};
+const getEmployesSAPBYD = () => {
+    const options = {
+        method: "GET",
+        url: `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection`,
+        auth: credentials,
+    };
+
+    axios(options)
+        .then((response) => {
+            const data = response.data;
+
+            if (response.status === 200) {
+                const employees = data.d.results;
+
+                employesSAP = response.data.d;
+
+                const promises = employees.map((employee) => {
+                    const uuid = employee.ObjectID;
+
+                    const subCollections = [
+                        "EmployeeEmployeePrivateAddressInformation",
+                    ];
+
+                    const subPromises = subCollections.map((subCollection) => {
+                        const subUrl = `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection('${uuid}')/${subCollection}`;
+
+                        const optionsSubUrl = {
+                            method: "GET",
+                            url: subUrl,
+                            auth: credentials,
+                        };
+
+                        return axios(optionsSubUrl)
+                            .then((subResponse) => {
+                                const subData = subResponse.data;
+
+                                if (subResponse.status === 200) {
+                                    employee[subCollection] =
+                                        subData.d.results[0];
+                                } else {
+                                    employee[subCollection] = `Error al obtener los datps`;
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(
+                                    "Error al obtener los datos: ",
+                                    error
+                                );
+                            });
+                    });
+
+                    return Promise.all(subPromises);
+                });
+
+                Promise.all(promises)
+                    .then(() => {
+                        console.log(employesSAP);
+                    })
+                    .catch((error) => {
+                        console.log(
+                            "Error al obtener los datos de la subcoleccion: ",
+                            error
+                        );
+                    });
+            } else {
+                console.log(
+                    "Error al obtener los datos de la coleccion principal"
+                );
+            }
+        })
+        .catch((error) => {
+            console.error(
+                "Error al obtener los datos de la coleccion principal: ",
+                error
+            );
+        });
+};
+getEmployesSAPBYD();
 
 /**
  * Url para la Api y conectar con LARAVEL
@@ -234,6 +315,33 @@ app.get("/ventasSemanaAnteriorAnterior", (req, res) => {
     res.send(JSON.stringify(ventasSemanaAnteriorAnteriorValue.results));
 });
 
+app.get("/listofemplyes", (req, res) => {
+    res.send(JSON.stringify(employesSAP.results));
+});
+
+// app.get("/employ", (req, res) => {
+//     let EmployeeEmployeePrivateAddressInformation = {};
+//     const filter = req.query["$filter"];
+
+//     const uuid = filter.split("'")[1];
+
+//     const options = {
+//         method: "GET",
+//         url: `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection('${uuid}')/EmployeeEmployeePrivateAddressInformation`,
+//         auth: credentials,
+//     };
+
+//     axios(options)
+//         .then((result) => {
+//             EmployeeEmployeePrivateAddressInformation = result.data.d;
+//             res.send(JSON.stringify(EmployeeEmployeePrivateAddressInformation.results));
+//         })
+//         .catch((error) => {
+//             console.log(error);
+//             res.status(500).send('Error en la solicitud');
+//         });
+
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

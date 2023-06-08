@@ -33,6 +33,11 @@ use App\Http\Controllers\SuccessCasesController;
 |
 */
 
+/**
+ * CONST URL
+ */
+define('URL_NODE', env('LOCALHOST_NODEJS'));
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -59,36 +64,37 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/city/edit/{id}', [CitiesController::class, 'edit'])->middleware('auth:api');
     Route::get('/audition/{id}', [AuditController::class, 'audition'])->middleware('auth:api');
     Route::get('/roles', [RolController::class, 'roles'])->middleware('auth:api');
-    
+
     Route::get('/marks/{mark}', [MarksController::class, 'getMarkByName']);
 
-    Route::post('/menus', [MenusController::class, 'store'] );
-    
+    Route::post('/menus', [MenusController::class, 'store']);
+
     Route::post('/usuarios', [UsersController::class, 'store']);
 
     Route::get('/successcases', [SuccessCasesController::class, 'data']);
-    
+
     Route::post('/roles', [RolController::class, 'store'])->middleware('auth:api');
     Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store')->middleware('auth:api');
     Route::post('/city', [CitiesController::class, 'store'])->middleware('auth:api');
     Route::post('/city/edit/{id}', [CitiesController::class, 'update'])->middleware('auth:api');
-    
+
     Route::delete('/roles/{id}', [RolController::class, 'destroy'])->middleware('auth:api');
     Route::resource('/recursos', BaseWebController::class)->middleware('auth:api');
     Route::middleware('auth:api')->get('/user', function (Request $request) {
         $user = $request->user();
         $isAdmin = $user->isAdmin();
-    
+
         return response()->json([
             'user' => $user,
             'admin' => $isAdmin,
         ]);
     });
-    
+
     Route::get('/budgets', [BudgetsController::class, 'getData'])->middleware('auth:api');
     Route::put('/budgets/edit/{id}', [BudgetsController::class, 'update'])->middleware('auth:api');
     Route::delete('/budget/{id}', [BudgetsController::class, 'destroy'])->middleware('auth:api');
 
+    
 });
 
 /**
@@ -101,25 +107,42 @@ Route::get('/sapData', function () {
 });
 
 Route::get('/ventasDia', function () {
-    $data = file_get_contents('http://localhost:3000/ventasDia');
+    $data = file_get_contents(URL_NODE . 'ventasDia');
     return response($data)->header('Content-Type', 'application/json');
 });
 
 Route::get('/ventasDiaAnterior', function () {
-    $data = file_get_contents('http://localhost:3000/ventasDiaAnterior');
+    $data = file_get_contents(URL_NODE . 'ventasDiaAnterior');
     return response($data)->header('Content-Type', 'application/json');
 });
 
 Route::get('/ventasSemanales', function () {
-    $data = file_get_contents('http://localhost:3000/ventasSemanales');
+    $data = file_get_contents(URL_NODE . 'ventasSemanales');
     return response($data)->header('Content-Type', 'application/json');
 });
 
 Route::get('/ventasSemanaAnteriorPasada', function () {
-    $data = file_get_contents('http://localhost:3000/ventasSemanaAnteriorAnterior');;
+    $data = file_get_contents(URL_NODE . 'ventasSemanaAnteriorAnterior');;
     return response($data)->header('Content-Type', 'application/json');
 });
 
+// Lista de empleados en SAP
+Route::get('/empleadosSAP', function () {
+
+    $data = file_get_contents(URL_NODE . 'listofemplyes');
+    return response($data)->header('Content-Type', 'application/json');
+});
+
+// Route::get('/empleadoSap', function (Request $request) {
+//     $queryOptions = [
+//         '$filter' => "UUID eq '{$request->UUID}'"
+//     ];
+    
+//     $url = URL_NODE.'employ?'. http_build_query($queryOptions);
+    
+//     $data = file_get_contents($url);
+//     return response($data)->header('Content-Type', 'application/json');
+// });
 
 /**
  * Rutas de prueba

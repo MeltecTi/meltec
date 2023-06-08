@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         return delay;
                     },
                 },
-                responsive: false,
+                responsive: true,
             },
         });
 
@@ -312,6 +312,7 @@ document.addEventListener("DOMContentLoaded", () => {
             type: "pie",
             data: valores,
             options: {
+                responsive: true,
                 plugins: {
                     legend: {
                         position: 'right',
@@ -340,7 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         return delay;
                     },
                 },
-                responsive: false,
             },
         });
 

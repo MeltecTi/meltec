@@ -30,6 +30,7 @@ use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\CalendarEventsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\GoogleApiController;
+use App\Http\Controllers\LogoutService;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SuccessCasesController;
 use App\Models\Product;
@@ -57,6 +58,7 @@ use App\Models\Product;
 Route::get('/whatsapp-send-message', [WhatsAppController::class, 'sendMessages']);
 Route::get('/webhook-whatsapp', [WhatsAppController::class, 'webhookWhatsapp']);
 Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
+
 
 
 Route::get('/', function () {
@@ -100,8 +102,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
  */
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
-    Route::get('home/auditoria', [AuditController::class, 'index'])->name('auditory.index');
+    //Recursos de rutas
     Route::resource('home/roles', RolController::class);
     Route::resource('home/usuarios', UsersController::class);
     Route::resource('home/blogs', BlogsController::class);
@@ -111,12 +112,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/ventajas', AdvantagesController::class);
     Route::resource('home/ciudades', CitiesController::class);
     Route::resource('home/budgets', BudgetsController::class);
-    Route::get('/exports', [BudgetsController::class, 'export'])->name('budgets.export');
-    Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
     Route::resource('home/calendarEvents', CalendarEventsController::class);
     Route::resource('/home/products', ProductsController::class);
     Route::resource('/home/casosdeexito', SuccessCasesController::class);
-
+    
+    // Metodos especificos
+    // Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
+    Route::post('/logout', LogoutService::class)->name('logout');
+    Route::get('home/auditoria', [AuditController::class, 'index'])->name('auditory.index');
+    Route::get('/exports', [BudgetsController::class, 'export'])->name('budgets.export');
+    Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
+    Route::get('/home/employes', [UsersController::class, 'employes']);
     /**
      * Rutas de Reportes de SAP
      */

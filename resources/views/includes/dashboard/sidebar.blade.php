@@ -81,7 +81,7 @@
         {{-- Fin Elementos de informes SAP --}}
         {{-- Administrador de sitio --}}
 
-        <li class="nav-item nav-category">{{ _('Administrador del Sitio') }}</li>
+        {{-- <li class="nav-item nav-category">{{ _('Administrador del Sitio') }}</li>
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-blog" aria-expanded="false"
                 aria-controls="form-elements">
@@ -97,11 +97,11 @@
                             href="{{ route('categorias.index') }}">{{ _('Categorias') }}</a></li>
                 </ul>
             </div>
-        </li>
+        </li> --}}
 
-        @if (auth()->user()->can('ver-pagina'))
-            {{-- Paginas --}}
-            <li class="nav-item">
+        {{-- @if (auth()->user()->can('ver-pagina')) --}}
+        {{-- Paginas --}}
+        {{-- <li class="nav-item">
                 <a href="#ui-pages" class="nav-link" data-bs-toggle="collapse" aria-expanded="false"
                     aria-controls="form-elements">
                     <i class="menu-icon mdi mdi-menu"></i>
@@ -120,11 +120,11 @@
                                 {{ _('Ventajas') }} </a></li>
                     </ul>
                 </div>
-            </li>
-            {{-- Fin Paginas --}}
+            </li> --}}
+        {{-- Fin Paginas --}}
 
-            {{-- Productos --}}
-            <li class="nav-item">
+        {{-- Productos --}}
+        {{-- <li class="nav-item">
                 <a href="#ui-products" class="nav-link" data-bs-toggle="collapse" aria-expanded="false"
                     aria-controls="form-elements">
                     <i class="menu-icon mdi mdi-cart"></i>
@@ -137,31 +137,36 @@
                                 class="nav-link">{{ _('Todos los productos') }}</a></li>
                     </ul>
                 </div>
-            </li>
-            {{-- Fin Productos --}}
-        @endif
+            </li> --}}
+        {{-- Fin Productos --}}
+        {{-- @endif --}}
 
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" href="{{ route('gallery.index') }}">
                 <i class="menu-icon mdi mdi-folder-image"></i>
                 <span class="menu-title">{{ _('Galeria de Imagenes') }}</span>
             </a>
-        </li>
+        </li> --}}
         {{-- Fin Administrador de sitio --}}
 
-        <li class="nav-item nav-category">{{ _('Sitio web Principal') }}</li>
+        {{-- <li class="nav-item nav-category">{{ _('Sitio web Principal') }}</li>
         <li class="nav-item">
             <a class="nav-link" href="{{ url('/') }}">
                 <i class="menu-icon mdi mdi-home"></i>
                 <span class="menu-title">{{ _('Visitar el sitio Web') }}</span>
             </a>
+        </li> --}}
+
+        <li class="nav-item">
+            @auth
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="nav-link"><i class="menu-icon mdi mdi-power"></i>
+                        <span class="menu-title">{{ _('Cerrar Sesion') }}</span></button>
+                </form>
+            @endauth
+
         </li>
     </ul>
 
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('logout') }}">
-            <i class="dropdown-item-icon mdi mdi-power"></i>
-            <span class="menu-title">{{ _('Cerrar Sesion') }}</span>
-        </a>
-    </li>
 </nav>

@@ -12,6 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Google\Client;
 use Google\Service\Calendar;
 use Google\Service\Calendar\Event;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GoogleApiController extends Controller
 {
@@ -33,12 +34,21 @@ class GoogleApiController extends Controller
             ]);
 
             $userNew->assignRole(1);
+            $token = JWTAuth::fromUser($userNew);
+
+            $userNew->api_token = $token;
+            $userNew->save();
+
             Auth::login($userNew);
             return redirect('/home');
         }
 
         $userExists->google_access_token = $user->token;
         $userExists->google_refresh_token  = $user->refreshToken;
+
+        $token = JWTAuth::fromUser($userExists);
+        $userExists->api_token = $token;
+
         $userExists->save();
 
         Auth::login($userExists);
