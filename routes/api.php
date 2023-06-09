@@ -19,6 +19,7 @@ use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\GalleriesController;
 use App\Http\Controllers\GoogleApiController;
 use App\Http\Controllers\AdvantagesController;
+use App\Http\Controllers\EnviameController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SuccessCasesController;
 
@@ -37,6 +38,8 @@ use App\Http\Controllers\SuccessCasesController;
  * CONST URL
  */
 define('URL_NODE', env('LOCALHOST_NODEJS'));
+
+Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -133,16 +136,16 @@ Route::get('/empleadosSAP', function () {
     return response($data)->header('Content-Type', 'application/json');
 });
 
-// Route::get('/empleadoSap', function (Request $request) {
-//     $queryOptions = [
-//         '$filter' => "UUID eq '{$request->UUID}'"
-//     ];
+Route::get('/empleadoSap', function (Request $request) {
+    $queryOptions = [
+        '$filter' => "UUID eq '{$request->UUID}'"
+    ];
     
-//     $url = URL_NODE.'employ?'. http_build_query($queryOptions);
+    $url = URL_NODE.'employ?'. http_build_query($queryOptions);
+    $data = file_get_contents($url);
     
-//     $data = file_get_contents($url);
-//     return response($data)->header('Content-Type', 'application/json');
-// });
+    return response($data)->header('Content-Type', 'application/json');
+});
 
 /**
  * Rutas de prueba
@@ -160,5 +163,8 @@ Route::get('/reservasSala', function () {
 /**
  * Pruebas
  */
+
+Route::get('/sellersEnviame', [EnviameController::class, 'getSellers']);
+Route::post('/sellersEnviame', [EnviameController::class, 'postNewSeller']);
 
 Route::post('/calendar/create', [GoogleApiController::class, 'prueba'])->middleware('auth:api');

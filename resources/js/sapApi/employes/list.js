@@ -113,9 +113,8 @@ const constructData = (employes) => {
 
         // Evento del boton
         buttonView.addEventListener("click", (e) => {
-
             e.preventDefault();
-            
+
             const uuidEmployed = ObjectID;
             employe(uuidEmployed);
         });
@@ -166,10 +165,49 @@ const clearDiv = () => {
 };
 
 const employe = async (uuid) => {
-    console.log(uuid);
+    try {
+        const url = `/api/empleadoSap?UUID=${uuid}`;
 
-    const modal = new bootstrap.Modal(
-        document.querySelector("#vieworeditData")
-    );
-    modal.show();
+        Swal.fire({
+            title: "Obteniendo datos!",
+            html: "Por favor espere!!",
+            timerProgressBar: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+        axios
+            .get(url, {
+                headers: {
+                    Authorization: `Bearer: ${apiToken}`,
+                },
+            })
+            .then((response) => {
+                const data = response.data;
+                console.log(data)
+
+                const { BusinessPartnerFormattedName } = data;
+
+                const vieworeditDataLabel = document.querySelector(
+                    "#vieworeditDataLabel"
+                );
+                vieworeditDataLabel.textContent = BusinessPartnerFormattedName;
+
+                const SAPname = document.querySelector("#SAPname");
+                SAPname.value = BusinessPartnerFormattedName;
+
+                const modal = new bootstrap.Modal(
+                    document.querySelector("#vieworeditData")
+                );
+
+                modal.show();
+                Swal.close();
+            })
+            .catch((error) => {
+                console.error(error);
+                Swal.close();
+            });
+    } catch (error) {
+        console.error(error);
+    }
 };

@@ -29,6 +29,7 @@ use App\Http\Controllers\AdvantagesController;
 use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\CalendarEventsController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\FlokzuController;
 use App\Http\Controllers\GoogleApiController;
 use App\Http\Controllers\LogoutService;
 use App\Http\Controllers\ProductsController;
@@ -57,7 +58,8 @@ use App\Models\Product;
 
 Route::get('/whatsapp-send-message', [WhatsAppController::class, 'sendMessages']);
 Route::get('/webhook-whatsapp', [WhatsAppController::class, 'webhookWhatsapp']);
-Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
+Route::post('/webhook-flokzu', [FlokzuController::class, 'respuestaFlokzu']);
+
 
 
 
@@ -115,14 +117,19 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('home/calendarEvents', CalendarEventsController::class);
     Route::resource('/home/products', ProductsController::class);
     Route::resource('/home/casosdeexito', SuccessCasesController::class);
-    
+
     // Metodos especificos
     // Route::get('/logout', [LogoutController::class, 'perform'])->name('logout.perform');
     Route::post('/logout', LogoutService::class)->name('logout');
     Route::get('home/auditoria', [AuditController::class, 'index'])->name('auditory.index');
     Route::get('/exports', [BudgetsController::class, 'export'])->name('budgets.export');
     Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
-    Route::get('/home/employes', [UsersController::class, 'employes']);
+    Route::get('/home/employes', [UsersController::class, 'employes'])->name('employees');
+    Route::get('/home/gestordeenvios', function () {
+        return view ('enviame.listMarketplace', [
+            'title' => 'Servicios de Enviame.io',
+        ]);
+    })->name('enviame');
     /**
      * Rutas de Reportes de SAP
      */

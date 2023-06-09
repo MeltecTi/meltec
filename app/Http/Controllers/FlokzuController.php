@@ -12,7 +12,9 @@ class FlokzuController extends Controller
 {
     public function respuestaFlokzu(Request $request)
     {
-        $data = $request->all();        
+        $data = $request->all();
+
+        dd($data);
 
         return response()->json([
             'data' => $data,

@@ -23,8 +23,8 @@
                     <ul class="nav flex-column sub-menu">
                         <li class="nav-item"> <a class="nav-link"
                                 href="{{ route('usuarios.index') }}">{{ _('Todos los Usuarios') }}</a></li>
-                        {{-- <li class="nav-item"> <a class="nav-link"
-                                href="{{ route('usuarios.create') }}">{{ _('Añadir Usuario') }}</a></li> --}}
+                        <li class="nav-item"> <a class="nav-link"
+                                href="{{ route('employees') }}">{{ _('Empleados Meltec') }}</a></li>
                     </ul>
                 </div>
             </li>

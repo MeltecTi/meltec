@@ -252,7 +252,9 @@ const getEmployesSAPBYD = () => {
                                     employee[subCollection] =
                                         subData.d.results[0];
                                 } else {
-                                    employee[subCollection] = `Error al obtener los datps`;
+                                    employee[
+                                        subCollection
+                                    ] = `Error al obtener los datps`;
                                 }
                             })
                             .catch((error) => {
@@ -268,7 +270,7 @@ const getEmployesSAPBYD = () => {
 
                 Promise.all(promises)
                     .then(() => {
-                        console.log(employesSAP);
+                        return;
                     })
                     .catch((error) => {
                         console.log(
@@ -319,29 +321,76 @@ app.get("/listofemplyes", (req, res) => {
     res.send(JSON.stringify(employesSAP.results));
 });
 
-// app.get("/employ", (req, res) => {
-//     let EmployeeEmployeePrivateAddressInformation = {};
-//     const filter = req.query["$filter"];
+app.get("/employ", (req, res) => {
+    let employe = {};
 
-//     const uuid = filter.split("'")[1];
+    const filter = req.query["$filter"];
+    const uuid = filter.split("'")[1];
 
-//     const options = {
-//         method: "GET",
-//         url: `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection('${uuid}')/EmployeeEmployeePrivateAddressInformation`,
-//         auth: credentials,
-//     };
+    const options = {
+        method: "GET",
+        url: `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection('${uuid}')`,
+        auth: credentials,
+    };
 
-//     axios(options)
-//         .then((result) => {
-//             EmployeeEmployeePrivateAddressInformation = result.data.d;
-//             res.send(JSON.stringify(EmployeeEmployeePrivateAddressInformation.results));
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//             res.status(500).send('Error en la solicitud');
-//         });
+    axios(options)
+        .then((response) => {
+            const data = response.data;
 
-// });
+            if (response.status === 200) {
+                employe = data.d;
+
+                const subCollections = [
+                    "EmployeeEmployeePrivateAddressInformation",
+                ];
+
+                const promises = subCollections.map((subCollection) => {
+                    const subUrl = `${sapUrl}/sap/byd/odata/cust/v1/base_empleados/EmployeeCollection('${uuid}')/${subCollection}`;
+
+                    const optionsSubUrl = {
+                        method: "GET",
+                        url: subUrl,
+                        auth: credentials,
+                    };
+
+                    return axios(optionsSubUrl)
+                        .then((subResponse) => {
+                            const subData = subResponse.data;
+
+                            if (subResponse.status === 200) {
+                                employe[subCollection] = subData;
+                            } else {
+                                console.error("Error al obtener los datos");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(
+                                "Error al obtener los datos de las subcategorias: ",
+                                error
+                            );
+                        });
+                });
+
+                res.send(JSON.stringify(employe.results));
+
+                Promise.all(promises)
+                    .then(() => {
+                        return;
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "Hubo un error al cumplir las promesas: ",
+                            error
+                        );
+                    });
+            } else {
+                console.error("Error al obtener los datos");
+            }
+        })
+        .catch((error) => {
+            console.error("Error al obtener los datos: ", error);
+        });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
