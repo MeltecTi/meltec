@@ -159,12 +159,3 @@ Route::get('/reservasSala', function () {
     return response()->json($data);
 });
 
-
-/**
- * Pruebas
- */
-
-Route::get('/sellersEnviame', [EnviameController::class, 'getSellers']);
-Route::post('/sellersEnviame', [EnviameController::class, 'postNewSeller']);
-
-Route::post('/calendar/create', [GoogleApiController::class, 'prueba'])->middleware('auth:api');

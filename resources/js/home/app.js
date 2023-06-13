@@ -2,6 +2,7 @@
 import axios from "axios";
 import { Chart } from "chart.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
     getTodaySales();
     getYearSales();
@@ -24,6 +25,7 @@ const getTodaySales = async () => {
             .get(url)
             .then((result) => {
                 const datas = result.data;
+
                 // Agrupar las ventas de cada vendedor
 
                 const resumeVentas = datas.reduce((acc, curr) => {
@@ -42,11 +44,18 @@ const getTodaySales = async () => {
                     return acc;
                 }, {});
 
+                // Ordenar las ventas
+                const sortedResumenVentas = Object.entries(resumeVentas)
+                    .sort((a, b) => b[1].totalVentas - a[1].totalVentas)
+                    .reduce((acc, [key, value]) => {
+                        acc[key] = value;
+                        return acc;
+                    }, {});
+
+                bestBuller(sortedResumenVentas);
+
                 // Funcion para obtener la sumatoria de todos las ventas
                 sumTotalDiario(datas);
-
-                // console.log(datas);
-                // console.log(resumeVentas);
             })
             .catch((error) => {
                 console.error(error);
@@ -95,6 +104,13 @@ const sumTotalDiario = (datas) => {
     rateTodaySales.textContent = formatedTotal;
 };
 
+const bestBuller = (buller) => {
+    const bestBuller = document.querySelector('#bestBuller');
+    const sell = Object.values(buller)[0].totalVentas;
+    const sellFormatted = formatPrice(sell);
+    bestBuller.textContent = sellFormatted;
+}
+// Funciones de auxilio y ayuda
 const actuallityPercent = () => {
     const numerator =  100 * yearTotal;
     const percent = (numerator / yearGoal).toFixed(2);
@@ -102,11 +118,6 @@ const actuallityPercent = () => {
     return `${percent}%`;
 }
 
-
-
-
-
-// Funciones de auxilio y ayuda
 const formatPrice = (numberParsed) => {
     const formatted = Number(numberParsed).toLocaleString('es-CO', options);
     return formatted
