@@ -36,6 +36,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SuccessCasesController;
 use App\Models\Product;
 
+use Spatie\GoogleCalendar\Event;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,7 +60,18 @@ use App\Models\Product;
 Route::get('/whatsapp-send-message', [WhatsAppController::class, 'sendMessages']);
 Route::get('/webhook-whatsapp', [WhatsAppController::class, 'webhookWhatsapp']);
 Route::post('/webhook-flokzu', [FlokzuController::class, 'respuestaFlokzu']);
+Route::get('/crear-evento', function () {
 
+    $event = new Event;
+
+    $event->name = 'A new event';
+    $event->startDateTime = Carbon\Carbon::now();
+    $event->endDateTime = Carbon\Carbon::now()->addHour();
+
+    $event->save();
+
+    dd($event);
+});
 
 
 
@@ -126,7 +138,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/exportTemplate', [BudgetsController::class, 'template'])->name('budgets.exportTemplate');
     Route::get('/home/employes', [UsersController::class, 'employes'])->name('employees');
     Route::get('/home/gestordeenvios', function () {
-        return view ('enviame.listMarketplace', [
+        return view('enviame.listMarketplace', [
             'title' => 'Servicios de Enviame.io',
         ]);
     })->name('enviame');

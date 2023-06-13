@@ -58,21 +58,21 @@ class GoogleApiController extends Controller
 
     public function prueba(Request $request)
     {
-        
+
         $client = new Client();
         $client->setAuthConfig(config('services.google.client_secret2'));
         $client->addScope(Calendar::CALENDAR);
-        
+
         $accessToken = auth()->user()->google_access_token;
-        
+
         $client->setAccessToken($accessToken);
 
-        if($client->isAccessTokenExpired()){
+        if ($client->isAccessTokenExpired()) {
             return response()->redirect('/login-google');
         }
-        
+
         $calendarServices = new Calendar($client);
-        
+
         $event = new Event([
             'summary' => 'Título del evento',
             'description' => 'Descripción del evento',
@@ -98,6 +98,48 @@ class GoogleApiController extends Controller
         return response()->json([
             // 'data' => $request->all(),
             'data' => $eventCreate,
+        ]);
+    }
+
+    public function createCalendarEvent()
+    {
+        $client = new Client();
+
+        $client->setClientId(env('GOOGLE_ID'));
+        $client->setClientSecret(env('GOOGLE_KEY_PRIV_OAUTH'));
+        $client->setRedirectUri(env('GOOGLE_REDIRECT_URI'));
+        $client->setAccessType('offline');
+
+        $accessToken = auth()->user()->google_access_token;
+
+        $client->setAccessToken($accessToken);
+
+        $calendarServices = new Calendar($client);
+
+        $event = new Event([
+            'summary' => 'Evento de Prueba',
+            'start' => [
+                'dateTime' => '2023-06-13T12:30:00',
+                'timeZone' => 'America/Los_Angeles',
+            ],
+            'end' => [
+                'dateTime' => '2023-06-13T13:30:00',
+                'timeZone' => 'America/Los_Angeles',
+            ],
+        ]);
+
+        $createEvent = $calendarServices->events->insert('primary', $event);
+
+        if(!$createEvent) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al crear el evento',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Evento Creado',
         ]);
     }
 }
