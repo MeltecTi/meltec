@@ -214,6 +214,8 @@ return [
         //Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
+        // Sanctum
+        Laravel\Sanctum\SanctumServiceProvider::class,
 
     ],
 

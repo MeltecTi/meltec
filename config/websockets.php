@@ -32,10 +32,10 @@ return [
             'enable_client_messages' => false,
             'enable_statistics' => true,
             'allowed_origins' => [
-                'http://localhost:8000',
+                'http://localhost:3000',
             ],
             'allowed_hosts' => [
-                'localhost:8000',
+                'localhost:3000',
             ]
         ],
     ],

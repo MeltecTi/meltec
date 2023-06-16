@@ -15,17 +15,32 @@ const sapUrl = process.env.SAP_URL;
  */
 
 let kpiValue = "";
+let ventasDia = "";
 function getDataSap() {
-    const options = {
+    const kpiOptions = {
         method: "GET",
         url: `${sapUrl}sap/byd/odata/analytics/kpi/Kpi.svc/Kpi('Z1B2BB527DDCF9E26004D8265')/Value`,
         auth: credentials,
     };
 
-    axios(options)
-        .then((response) => {
-            kpiValue = response.data.d;
-        })
+    let datenow = new Date();
+    datenow.setHours(0, 0, 0, 0);
+    let formattedDateNow = datenow.toISOString().slice(0, 19);
+
+    const ventasDiaOptions = {
+        method: "GET",
+        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formattedDateNow}'&$format=json`,
+        auth: credentials,
+    };
+
+    axios
+        .all([axios(kpiOptions), axios(ventasDiaOptions)])
+        .then(
+            axios.spread((kpiResponse, ventasDiaResponse) => {
+                kpiValue = kpiResponse.data.d;
+                ventasDia = ventasDiaResponse.data.d;
+            })
+        )
         .catch((error) => {
             console.error(error);
         });
@@ -33,33 +48,6 @@ function getDataSap() {
 
 getDataSap();
 setInterval(getDataSap, 5000);
-
-/**
- * Obtener ventas del dia
- */
-
-let ventasMes = "";
-function getVentasDia() {
-    let datenow = new Date();
-    datenow.setHours(0, 0, 0, 0);
-    let formattedDateNow = datenow.toISOString().slice(0, 19);
-
-    const options = {
-        method: "GET",
-        url: `${sapUrl}sap/byd/odata/ana_businessanalytics_analytics.svc/RPCRMCIVIB_Q0001QueryResults?$select=TIPR_PROD_UUID,TDOC_YEAR_MONTH,TIP_SALES_UNIT,CDOC_UUID,CDOC_INV_DATE,TDPY_BILLFR_UUID,TIP_SAL_EMP,TIPR_REFO_CATCP,CIP_SALES_UNIT,KCNT_REVENUE,KCINV_QTY&$top=99999&$filter=CDOC_INV_DATE eq datetime'${formattedDateNow}'&$format=json`,
-        auth: credentials,
-    };
-
-    axios(options)
-        .then((response) => {
-            ventasMes = response.data.d;
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-}
-getVentasDia();
-setInterval(getVentasDia, 5000);
 
 /**
  * Ventas al dia anterior
@@ -302,7 +290,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/ventasDia", (req, res) => {
-    res.send(JSON.stringify(ventasMes.results));
+    res.send(JSON.stringify(ventasDia.results));
 });
 
 app.get("/ventasDiaAnterior", (req, res) => {
@@ -390,6 +378,11 @@ app.get("/employ", (req, res) => {
         .catch((error) => {
             console.error("Error al obtener los datos: ", error);
         });
+});
+
+app.get("/service-worker.js", (req, res) => {
+    res.set("Content-Type", "application/javascript");
+    res.sendFile(__dirname + "/service-worker.js");
 });
 
 const port = process.env.PORT || 3000;

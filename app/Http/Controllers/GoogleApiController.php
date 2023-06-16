@@ -34,9 +34,9 @@ class GoogleApiController extends Controller
             ]);
 
             $userNew->assignRole(1);
-            $token = JWTAuth::fromUser($userNew);
+            $accessToken = $userNew->createToken('google-auth')->plainTextToken;
 
-            $userNew->api_token = $token;
+            $userNew->api_token = $accessToken;
             $userNew->save();
 
             Auth::login($userNew);
@@ -46,8 +46,8 @@ class GoogleApiController extends Controller
         $userExists->google_access_token = $user->token;
         $userExists->google_refresh_token  = $user->refreshToken;
 
-        $token = JWTAuth::fromUser($userExists);
-        $userExists->api_token = $token;
+        $accessToken = $userExists->createToken('google-auth')->plainTextToken;
+        $userExists->api_token = $accessToken;
 
         $userExists->save();
 

@@ -16,3 +16,4 @@
         </div>
     </div>
 @endsection
+@vite(['resources/js/custom/enviame/index.js'])

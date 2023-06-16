@@ -93,12 +93,15 @@ Route::group(['middleware' => ['auth:api']], function () {
         ]);
     });
 
+    
+
     Route::get('/budgets', [BudgetsController::class, 'getData'])->middleware('auth:api');
     Route::put('/budgets/edit/{id}', [BudgetsController::class, 'update'])->middleware('auth:api');
     Route::delete('/budget/{id}', [BudgetsController::class, 'destroy'])->middleware('auth:api');
-
     
 });
+Route::get('/getseelers', [EnviameController::class, 'getSellers'])->middleware('auth:api');
+
 
 /**
  * Rutas de Sap
@@ -140,10 +143,10 @@ Route::get('/empleadoSap', function (Request $request) {
     $queryOptions = [
         '$filter' => "UUID eq '{$request->UUID}'"
     ];
-    
-    $url = URL_NODE.'employ?'. http_build_query($queryOptions);
+
+    $url = URL_NODE . 'employ?' . http_build_query($queryOptions);
     $data = file_get_contents($url);
-    
+
     return response($data)->header('Content-Type', 'application/json');
 });
 
@@ -159,3 +162,6 @@ Route::get('/reservasSala', function () {
     return response()->json($data);
 });
 
+
+
+Route::post('/postNewSeller', [EnviameController::class, 'postNewSeller']);

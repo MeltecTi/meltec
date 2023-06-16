@@ -8,8 +8,11 @@ use App\Models\User;
 
 // Controllers
 use App\Models\BaseWeb;
+use App\Models\Product;
+use Spatie\GoogleCalendar\Event;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LogoutService;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\HomeController;
 use Laravel\Socialite\Facades\Socialite;
@@ -17,26 +20,24 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BlogsController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MenusController;
+// Supports
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\CitiesController;
-use App\Http\Controllers\LogoutController;
-// Supports
-use App\Http\Controllers\WhatsAppController;
-use App\Http\Controllers\GalleriesController;
 
 // Socialite
-use App\Http\Controllers\AdvantagesController;
-use App\Http\Controllers\BudgetsController;
-use App\Http\Controllers\CalendarEventsController;
-use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\FlokzuController;
-use App\Http\Controllers\GoogleApiController;
-use App\Http\Controllers\LogoutService;
+use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\WhatsAppController;
+use App\Http\Controllers\GalleriesController;
+use App\Http\Controllers\GoogleApiController;
+use App\Http\Controllers\AdvantagesController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SuccessCasesController;
-use App\Models\Product;
 
-use Spatie\GoogleCalendar\Event;
+use App\Http\Controllers\CalendarEventsController;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,9 +50,10 @@ use Spatie\GoogleCalendar\Event;
 */
 
 /**
- * Constantes declaradas
+ * Get Cookie to Front
  */
 
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 /**
  * Todas las rutas Normales a las que puede acceder el publico sin necesidad de estar autenticado, rutas y datos dinamicos traidos desde el MenuController
