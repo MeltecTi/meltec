@@ -25,7 +25,6 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\CitiesController;
 
 // Socialite
-use App\Http\Controllers\FlokzuController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\BudgetsController;
 use App\Http\Controllers\ProductsController;
@@ -61,7 +60,6 @@ Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
 
 Route::get('/whatsapp-send-message', [WhatsAppController::class, 'sendMessages']);
 Route::get('/webhook-whatsapp', [WhatsAppController::class, 'webhookWhatsapp']);
-Route::post('/webhook-flokzu', [FlokzuController::class, 'respuestaFlokzu']);
 Route::get('/crear-evento', function () {
 
     $event = new Event;
@@ -163,6 +161,12 @@ Route::group(['middleware' => ['auth']], function () {
             'title' => 'Reporte de Ventas Año ' . date('Y')
         ]);
     });
+
+    Route::get('/home/appsaprove', function() {
+        return view('dashpages.appIntegration', [
+            'title' => 'Aplicaciones',
+        ]);
+    })->name('integration');
 });
 
 

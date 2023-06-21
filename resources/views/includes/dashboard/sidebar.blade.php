@@ -25,6 +25,8 @@
                                 href="{{ route('usuarios.index') }}">{{ _('Todos los Usuarios') }}</a></li>
                         <li class="nav-item"> <a class="nav-link"
                                 href="{{ route('employees') }}">{{ _('Empleados Meltec') }}</a></li>
+                        <li class="nav-item"> <a class="nav-link"
+                                href="{{ route('integration') }}">{{ _('Aplicaciones Integradas') }}</a></li>
                     </ul>
                 </div>
             </li>

@@ -60,7 +60,7 @@ export default defineConfig({
                 "resources/js/home/app.js",
                 "resources/js/sapApi/employes/list.js",
                 "resources/js/custom/enviame/index.js",
-                "service-worker.js",
+                "resources/js/custom/appsaprove/app.js",
             ],
             refresh: true,
         }),

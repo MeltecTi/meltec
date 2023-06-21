@@ -16,9 +16,9 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 // Spatie
 use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements AuditableContract, JWTSubject
+
+class User extends Authenticatable implements AuditableContract
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, Auditable;
 
@@ -60,16 +60,6 @@ class User extends Authenticatable implements AuditableContract, JWTSubject
     ];
 
     protected $guard_name = 'api';
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 
     public function blogs(): HasMany
     {

@@ -15,13 +15,16 @@ use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\FlokzuController;
 use App\Http\Controllers\BaseWebController;
 use App\Http\Controllers\BudgetsController;
+use App\Http\Controllers\EnviameController;
 use App\Http\Controllers\WhatsAppController;
 use App\Http\Controllers\GalleriesController;
-use App\Http\Controllers\GoogleApiController;
 use App\Http\Controllers\AdvantagesController;
-use App\Http\Controllers\EnviameController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\TokensAppsController;
 use App\Http\Controllers\SuccessCasesController;
+use App\Http\Controllers\api\FlokzuApiController;
+use App\Http\Controllers\api\powerbi\FetchDataController;
+use App\Http\Controllers\webhooks\FlokzuWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +42,11 @@ use App\Http\Controllers\SuccessCasesController;
  */
 define('URL_NODE', env('LOCALHOST_NODEJS'));
 
-Route::post('/webhook-whatsapp', [WhatsAppController::class, 'processWebhook']);
+Route::post('/testFlokzuDatabase', [FlokzuApiController::class, 'getAllDataFromDatabase']);
+
+Route::post('/testWebhook', [FlokzuWebhookController::class, 'testWebhook']);
+Route::post('/testtwo', [FlokzuWebhookController::class, 'testtwo']);
+Route::post('/apiPostTest', [FlokzuWebhookController::class, 'apiPostTest']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -93,12 +100,12 @@ Route::group(['middleware' => ['auth:api']], function () {
         ]);
     });
 
-    
+    Route::post('/generateAppToken', [TokensAppsController::class, 'generateAppToken']);
+
 
     Route::get('/budgets', [BudgetsController::class, 'getData'])->middleware('auth:api');
     Route::put('/budgets/edit/{id}', [BudgetsController::class, 'update'])->middleware('auth:api');
     Route::delete('/budget/{id}', [BudgetsController::class, 'destroy'])->middleware('auth:api');
-    
 });
 Route::get('/getseelers', [EnviameController::class, 'getSellers'])->middleware('auth:api');
 
@@ -165,3 +172,12 @@ Route::get('/reservasSala', function () {
 
 
 Route::post('/postNewSeller', [EnviameController::class, 'postNewSeller']);
+
+
+/**
+ * Test
+ */
+
+Route::middleware(['custom.auth:appExternal'])->group(function () {
+    Route::get('/kpitest', [FetchDataController::class, 'kpisFlokzu']);
+});

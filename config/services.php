@@ -32,12 +32,25 @@ return [
     ],
 
     'google' => [
-        'client_id' => env('GOOGLE_ID'),
-        'client_secret' => env('GOOGLE_KEY_PRIV_OAUTH'),
-        'client_secret2' => storage_path('credentials/client_secret_634116498920-rpefsa8ifslc6ckf8fc2u3ss39q8348n.apps.googleusercontent.com.json'),
-        'redirect' => '/google-callback',
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
+        'redirect_callback' => env('GOOGLE_REDIRECT_CALLBACK'),
         'scopes' => [
-            'https://www.googleapis.com/auth/calendar',
+            \Google\Service\Calendar::CALENDAR_EVENTS_READONLY,
+            \Google\Service\Calendar::CALENDAR_READONLY,
+            \Google\Service\Oauth2::OPENID,
+            \Google\Service\Oauth2::USERINFO_EMAIL,
+            \Google\Service\Oauth2::USERINFO_PROFILE,
+        ],
+        'approval_prompt' => env('GOOGLE_APPROVAL_PROMPT', 'force'),
+        'access_type' => env('GOOGLE_ACCESS_TYPE', 'offline'),
+        'include_granted_scopes' => true,
+        'openid' => [
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/calendar.events.readonly',
+            'https://www.googleapis.com/auth/calendar.readonly',
         ]
     ],
 

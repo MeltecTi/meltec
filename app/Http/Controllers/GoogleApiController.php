@@ -12,7 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Google\Client;
 use Google\Service\Calendar;
 use Google\Service\Calendar\Event;
-use Tymon\JWTAuth\Facades\JWTAuth;
+
 
 class GoogleApiController extends Controller
 {

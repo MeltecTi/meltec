@@ -208,8 +208,7 @@ return [
         //Laravel Collective
         Collective\Html\HtmlServiceProvider::class,
 
-        //JWT
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
 
         //Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
@@ -234,8 +233,6 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class, // Deshabilitar en Produccion
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 

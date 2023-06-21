@@ -44,6 +44,13 @@ return [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false
+        ],
+        'appExternal' => [
+            'driver' => 'token',
+            'provider' => 'external',
+            'hash' => false,
+            'input_key' => 'Authorization',
+            'storage_key' => 'client_secret',
         ]
     ],
 
@@ -69,6 +76,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'external' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AppExternal::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
